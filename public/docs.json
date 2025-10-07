@@ -53,7 +53,7 @@
         "icon": "/images/talos.svg",
         "versions": [
           {
-            "version": "v1.11",
+            "version": "Talos - v1.11",
             "groups": [
               {
                 "group": "Overview",
@@ -363,7 +363,7 @@
             ]
           },
           {
-            "version": "v1.10",
+            "version": "Talos - v1.10",
             "groups": [
               {
                 "group": "Overview",
@@ -619,7 +619,7 @@
             ]
           },
           {
-            "version": "v1.9",
+            "version": "Talos - v1.9",
             "groups": [
               {
                 "group": "Overview",
@@ -873,7 +873,7 @@
             ]
           },
           {
-            "version": "v1.8",
+            "version": "Talos - v1.8",
             "groups": [
               {
                 "group": "Overview",
@@ -1127,7 +1127,7 @@
             ]
           },
           {
-            "version": "v1.7",
+            "version": "Talos - v1.7",
             "groups": [
               {
                 "group": "Overview",
@@ -1376,7 +1376,7 @@
             ]
           },
           {
-            "version": "v1.6",
+            "version": "Talos - v1.6",
             "groups": [
               {
                 "group": "Overview",

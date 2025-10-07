@@ -1,5 +1,5 @@
 navigation:
-  version: "v1.8"
+  version: "Talos - v1.8"
   tabs:
     - tab: "Talos"
       icon: "/images/talos.svg"
