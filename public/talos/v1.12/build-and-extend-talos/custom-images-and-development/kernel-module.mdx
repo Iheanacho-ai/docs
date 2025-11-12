@@ -312,3 +312,28 @@ Apply the machine config and patch to your test machine.
 ```bash
 talosctl apply -f controlplane.yaml -p '@my-module.yaml'
 ```
+
+### Disabling kernel module signature verification
+
+Starting with Talos v1.12, kernel module signature verification can be optionally disabled.
+
+By default, Talos enforces that all kernel modules must be signed with a trusted key
+(`module.sig_enforce=1`). This ensures that only verified modules are loaded into the kernel.
+
+If you are developing or testing unsigned kernel modules and wish to disable signature
+verification, you can do so by setting the following kernel parameter:
+
+```bash
+module.sig_enforce=0
+```
+
+You can supply this parameter when building installation media or images with Factory or Imager:
+
+```bash
+# Example using Imager:
+imager --arch amd64 \
+  --base-installer-image=<image> \
+  --extra-kernel-arg "module.sig_enforce=0"
+```
+
+> **Note**: This is intended for testing and development only. Disabling signature verification reduces system security and should not be used in production environments.
