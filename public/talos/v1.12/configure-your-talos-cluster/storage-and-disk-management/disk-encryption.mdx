@@ -237,3 +237,30 @@ talosctl apply-config --insecure -n <node ip> -f config.yaml
 ```
 
 After installation is complete the node should encrypt the STATE partition.
+
+### Configuring TPM-Based Disk Encryption
+
+Starting from Talos v1.12, you can choose which Platform Configuration Register (PCR)
+values to bind to when using TPM-based disk encryption.
+
+This allows more flexibility across different hardware and Secure Boot setups.
+
+Use the `options.pcrs` field under the `tpm` key in your encryption configuration.
+If no PCRs are specified, Talos defaults to **PCR 7** to stay compatible with older versions.
+
+Example:
+
+```yaml
+apiVersion: v1alpha1
+kind: VolumeConfig
+name: STATE
+encryption:
+  provider: luks2
+  keys:
+    - tpm:
+        options:
+          pcrs: [7, 11]
+      slot: 0
+```
+
+> **Note**: Signed PCR policies are still bound to PCR 11. This flexibility helps avoid issues caused by varying PCR 7 states due to Secure Boot differences.
