@@ -24,11 +24,12 @@ For manual or Windows installation, see the <a href={`../../talos/${version}/get
 ## Omni-managed clusters and permissions
 
 When managing Talos nodes through Omni, certain privileged `talosctl` commands are restricted.
-Operations such as `talosctl reset` must be performed through the Omni UI or API.
 
-Users with at least the [Operator](https://omni.siderolabs.com/reference/acls#role) role can still run the following commands:
+For example, while the [Operator](../reference/acls#role) role normally allows many actions in Talos, Omni limits this role to the smaller set of commands listed below:
 
-| Command                                        |
+Users with at least the `os:operator` role can run:
+
+| Allowed commands                                        |
 | ---------------------------------------------- |
 | `talosctl etcd alarm list`                     |
 | `talosctl etcd alarm disarm`                   |
@@ -39,6 +40,25 @@ Users with at least the [Operator](https://omni.siderolabs.com/reference/acls#ro
 | `talosctl restart`                             |
 | `talosctl service <id> [stop\|start\|restart]` |
 | `talosctl shutdown`                            |
+
+Additionally, administrators (users with `os:admin` role) can run these commands through Omni:
+
+| Command                     |
+| --------------------------- |
+| `talosctl meta write`       |
+| `talosctl meta delete`      |
+| `talosctl blockdevice wipe` |
+
+
+Examples of operator level commands **blocked** when routed through Omni include:
+
+- **File & system inspection**: `talosctl ls`, `talosctl read`, `talosctl readfile`
+- **Debugging/state**: `talosctl logs`, `talosctl dmesg`, `talosctl containers`
+- **Config changes**: `talosctl apply-config`, `talosctl patch mc`, `talosctl reset`, `talosctl upgrade`
+- **Networking**: `talosctl apply-netconfig`, `talosctl get links`, `talosctl get addrs`
+- **Disk operations**: `talosctl disk list`, `talosctl disk wipe`, `talosctl disk partition`
+
+> **Note**: If a `talosctl` command is *not* listed in the allowed command table above, it is blocked when using the Omni endpoint.
 
 ## Sensitive resources
 
