@@ -14,61 +14,6 @@ To follow this guide you must have machines registered to your Omni instance. Re
 You can create a cluster in Omni using this registered machines through the Omni UI, or using cluster templates through manual or dynamic machine allocation.
 
 <Tabs>
-  <Tab title="UI">
-
-    To create a cluster in Omni using the UI:
-
-    ### Step 1: Open the cluster creation form
-
-    Select the **Clusters** tab in the sidebar, then click **Create Cluster**.
-
-    ![Create a clusters tab](./images/create-a-cluster-clusters-tab.png)
-
-    ### Step 2: Fill in the cluster details
-
-    - **Name**: Give your cluster a unique name. Note that a cluster cannot be renamed after it is created.
-    - **Talos version**: Select the version of Talos Linux to run on your cluster.
-    - **Kubernetes version**: Select the Kubernetes version for your cluster.
-    - **Labels**: Optionally add labels to your cluster.
-    - **Features**: Optionally enable additional features such as [disk encryption](../security-and-authentication/omni-kms-disk-encryption) or [workload service proxying](../cluster-management/expose-an-http-service-from-a-cluster).
-
-    ![Create a clusters form](./images/create-a-cluster-form.png)
-
-    <Info>
-    Disk encryption can only be enabled at cluster creation time and cannot be turned on afterwards. Enabling it configures Omni as the cluster's [Key Management Server](../security-and-authentication/omni-kms-disk-encryption), which means local disk access will not be possible unless the machine is connected to Omni.
-    </Info>
-
-    ### Step 3: Assign machines
-
-    From the **Available Machines** list, assign a role to each machine you want in the cluster:
-
-    - **CP** — control plane
-    - **WO** — worker
-
-    ### Step 4: (Optional) Select an install disk
-
-    Use the dropdown next to each machine to select the OS install disk.
-
-    <img src="./images/create-a-cluster-available-machines.png" alt="Available machines list showing role assignment and disk selection" />
-
-    ### Step 5: Create the cluster
-
-    Click **Create Cluster** to provision your cluster.
-
-    ### Step 6: (Optional) Export the cluster template
-
-    If you want to manage the cluster using cluster templates later, you can export the template from an existing cluster instead of creating it manually.
-
-    Run this command to export the cluster into a cluster template:
-
-    ```bash
-    omnictl cluster template export --cluster <CLUSTER_NAME> -o cluster.yaml
-    ```
-
-    For more details, see the [Export a cluster template documentation](../cluster-management/export-a-cluster-template-from-a-cluster-created-in-the-ui).
-
-  </Tab>
-
 <Tab title="CLI through manual machine allocation">
 
   When creating a cluster using cluster templates with manually allocated machines, first identify the unique ID of each machine so the template can reference them.
@@ -213,6 +158,61 @@ You can create a cluster in Omni using this registered machines through the Omni
     ```bash
     omnictl cluster template status -f cluster.yaml
     ```
+  </Tab>
+
+  <Tab title="UI">
+
+    To create a cluster in Omni using the UI:
+
+    ### Step 1: Open the cluster creation form
+
+    Select the **Clusters** tab in the sidebar, then click **Create Cluster**.
+
+    ![Create a clusters tab](./images/create-a-cluster-clusters-tab.png)
+
+    ### Step 2: Fill in the cluster details
+
+    - **Name**: Give your cluster a unique name. Note that a cluster cannot be renamed after it is created.
+    - **Talos version**: Select the version of Talos Linux to run on your cluster.
+    - **Kubernetes version**: Select the Kubernetes version for your cluster.
+    - **Labels**: Optionally add labels to your cluster.
+    - **Features**: Optionally enable additional features such as [disk encryption](../security-and-authentication/omni-kms-disk-encryption) or [workload service proxying](../cluster-management/expose-an-http-service-from-a-cluster).
+
+    ![Create a clusters form](./images/create-a-cluster-form.png)
+
+    <Info>
+    Disk encryption can only be enabled at cluster creation time and cannot be turned on afterwards. Enabling it configures Omni as the cluster's [Key Management Server](../security-and-authentication/omni-kms-disk-encryption), which means local disk access will not be possible unless the machine is connected to Omni.
+    </Info>
+
+    ### Step 3: Assign machines
+
+    From the **Available Machines** list, assign a role to each machine you want in the cluster:
+
+    - **CP** — control plane
+    - **WO** — worker
+
+    ### Step 4: (Optional) Select an install disk
+
+    Use the dropdown next to each machine to select the OS install disk.
+
+    <img src="./images/create-a-cluster-available-machines.png" alt="Available machines list showing role assignment and disk selection" />
+
+    ### Step 5: Create the cluster
+
+    Click **Create Cluster** to provision your cluster.
+
+    ### Step 6: (Optional) Export the cluster template
+
+    If you want to manage the cluster using cluster templates later, you can export the template from an existing cluster instead of creating it manually.
+
+    Run this command to export the cluster into a cluster template:
+
+    ```bash
+    omnictl cluster template export --cluster <CLUSTER_NAME> -o cluster.yaml
+    ```
+
+    For more details, see the [Export a cluster template documentation](../cluster-management/export-a-cluster-template-from-a-cluster-created-in-the-ui).
+
   </Tab>
 </Tabs>
 

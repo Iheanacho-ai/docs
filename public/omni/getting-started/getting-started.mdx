@@ -60,45 +60,54 @@ You must have the following to create a cluster with Omni:
 
 ## Step 1: Download installation media
 
-Omni is a Bring Your Own Machine platform. You only need to boot a machine from a Talos image configured to connect to your Omni instance.
+Omni is a Bring Your Own Machine platform. You only need to boot a machine from a Talos Omni image configured to connect to your Omni instance.
 
-You can download this Omni image from either the Omni UI or the CLI:
+You can download the Talos Omni image using either the CLI or the Omni UI:
 
 <Tabs>
-<Tab title="Omni UI">
-To download the Omni image from the Omni dashboard:
+  <Tab title="CLI">
 
-1. Log in to your Omni dashboard.
-2. Click the **Download Installation Media** button to open its modal.
+  Run the following command to download a Talos Omni ISO image:
 
-![Download Installation Media](./images/getting-started-installation-media.png)
+  ```bash
+  omnictl download iso
+  ```
 
-3. Choose the appropriate image for your machine.
+  To see additional options such as targeting different machines or adding extensions and customizations, run:
 
-![Appropriate Omni image](./images/getting-started-appropriate-image.png)
+  ```bash
+  omnictl download iso --help
+  ```
 
-4. Click **Download** to begin downloading the Omni image.
+  </Tab>
 
-</Tab>
-<Tab title="CLI">
+  <Tab title="Omni UI">
 
-Run this command to download the installation media:
+  To download the Talos Omni image from the Omni dashboard:
 
-```bash
-omnictl download iso
-```
-</Tab>
+  1. Log in to your Omni dashboard.
+  2. Click the **Download Installation Media** button to open the **Create New Media** wizard.
+
+  ![Download Installation Media](./images/getting-started-installation-media.png)
+
+  3. On each page of the **Create New Media** wizard, select the appropriate options for your setup, then click **Next** to continue.
+
+     The **Create New Media** wizard is identical to the [Image Factory](https://factory.talos.dev/) and it is split across multiple pages. Each page presents a different set of configuration options, such as architecture, hardware type, and Talos Linux version, that you can use to customize your Talos Omni image.
+
+  4. Select the appropriate boot option for your machine on the Schematic Ready page to download the Talos Omni image.
+
+  </Tab>
 </Tabs>
-
-> **Note**: Some platforms (like cloud providers) require additional steps to import the image, for example, uploading to an S3 bucket or creating a VM image. Follow the platform-specific instructions if prompted.
 
 ## Step 2: Boot your machines
 
-Boot each machine you want to add to the cluster using the Omni image you downloaded in Step 1.
+Boot each machine you want to add to the cluster using the Omni image you downloaded in **Step 1**.
 
 After the machines have booted, they’ll appear in the **Machines** section.
 
 Depending on your environment, you can use the following methods:
+
+<Note>If your environment is not listed here, see the [Register machines with Omni documentation](../omni-cluster-setup/registering-machines/register-machines-with-omni) for more details</Note>
 
 <Tabs>
 <Tab title="Local (QEMU / UTM)">

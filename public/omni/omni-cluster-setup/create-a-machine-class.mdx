@@ -6,6 +6,26 @@ description: Define a reusable group of machines based on labels and conditions 
 This guide shows you how to create a machine class.
 
 <Tabs>
+  <Tab title="CLI">
+    Create a file called `machine-class.yaml` with the following content:
+
+    ```yaml
+    metadata:
+      namespace: default
+      type: MachineClasses.omni.sidero.dev
+      id: test
+    spec:
+      matchlabels:
+        # matches machines with amd64 architecture and more than 2 CPUs
+        - omni.sidero.dev/arch = amd64, omni.sidero.dev/cpus > 2
+    ```
+
+    Create the machine class:
+
+    ```bash
+    omnictl apply -f machine-class.yaml
+    ```
+  </Tab>
 
   <Tab title="UI">
     First, click the “Machine Classes” section  in the sidebar on the left
@@ -27,26 +47,6 @@ This guide shows you how to create a machine class.
     <img src="./images/create-a-machine-class-conditions-red.png" alt=""/>
 
     Name the machine class, then click “Create Machine Class”.
-  </Tab>
-  <Tab title="CLI">
-    Create a file called `machine-class.yaml` with the following content:
-
-    ```yaml
-    metadata:
-      namespace: default
-      type: MachineClasses.omni.sidero.dev
-      id: test
-    spec:
-      matchlabels:
-        # matches machines with amd64 architecture and more than 2 CPUs
-        - omni.sidero.dev/arch = amd64, omni.sidero.dev/cpus > 2
-    ```
-
-    Create the machine class:
-
-    ```bash
-    omnictl apply -f machine-class.yaml
-    ```
   </Tab>
 
 </Tabs>
