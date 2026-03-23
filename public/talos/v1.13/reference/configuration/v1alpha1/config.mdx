@@ -135,12 +135,6 @@ machine:
       <td></td>
     </tr>
     <tr>
-      <td>`network`</td>
-      <td><a href="#network">NetworkConfig</a></td>
-      <td>Provides machine specific network configuration options.</td>
-      <td></td>
-    </tr>
-    <tr>
       <td>`install`</td>
       <td><a href="#install">InstallConfig</a></td>
       <td>Used to provide instructions for installations.<br /><br />Note that this configuration section gets silently ignored by Talos images that are considered pre-installed.<br />To make sure Talos installs according to the provided configuration, Talos should be booted with ISO or PXE-booted.</td>
@@ -151,12 +145,6 @@ machine:
       <td><a href="#files%5B%5D">MachineFile</a></td>
       <td>Allows the addition of user specified files.<br />The value of `op` can be `create`, `overwrite`, or `append`.<br />In the case of `create`, `path` must not exist.<br />In the case of `overwrite`, and `append`, `path` must be a valid file.<br />If an `op` value of `append` is used, the existing file will be appended.<br />Note that the file contents are not required to be base64 encoded.</td>
       <td></td>
-    </tr>
-    <tr>
-      <td>`env`</td>
-      <td>Env</td>
-      <td>The `env` field allows for the addition of environment variables.<br />All environment variables are set on PID 1 in addition to every service.</td>
-      <td>``GRPC_GO_LOG_VERBOSITY_LEVEL``<br />``GRPC_GO_LOG_SEVERITY_LEVEL``<br />``http_proxy``<br />``https_proxy``<br />``no_proxy``<br /></td>
     </tr>
     <tr>
       <td>`sysctls`</td>
@@ -320,7 +308,7 @@ KubeletConfig represents the kubelet config values.
 ```yaml
 machine:
     kubelet:
-        image: ghcr.io/siderolabs/kubelet:v1.35.0 # The `image` field is an optional reference to an alternative kubelet image.
+        image: ghcr.io/siderolabs/kubelet:v1.36.0-alpha.2 # The `image` field is an optional reference to an alternative kubelet image.
         # The `extraArgs` field is used to provide additional flags to the kubelet.
         extraArgs:
             feature-gates: ServerSideApply=true
@@ -393,7 +381,7 @@ machine:
     </tr>
     <tr>
       <td>`extraArgs`</td>
-      <td>map[string]string</td>
+      <td>Args</td>
       <td>The `extraArgs` field is used to provide additional flags to the kubelet.</td>
       <td></td>
     </tr>
@@ -614,112 +602,6 @@ machine:
       <td>`validSubnets`</td>
       <td>[]string</td>
       <td>The `validSubnets` field configures the networks to pick kubelet node IP from.<br />For dual stack configuration, there should be two subnets: one for IPv4, another for IPv6.<br />IPs can be excluded from the list by using negative match with `!`, e.g `!10.0.0.0/8`.<br />Negative subnet matches should be specified last to filter out IPs picked by positive matches.<br />If not specified, node IP is picked based on cluster podCIDRs: IPv4/IPv6 address or both.</td>
-      <td></td>
-    </tr>
-  </tbody>
-</table>
-
-### network
-
-NetworkConfig represents the machine's networking config values.
-
-<table>
-  <thead>
-    <tr>
-      <th>Field</th>
-      <th>Type</th>
-      <th>Description</th>
-      <th>Value(s)</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr>
-      <td>`kubespan`</td>
-      <td><a href="#kubespan">NetworkKubeSpan</a></td>
-      <td>Configures KubeSpan feature.</td>
-      <td></td>
-    </tr>
-  </tbody>
-</table>
-
-#### kubespan
-
-NetworkKubeSpan struct describes KubeSpan configuration.
-
-```yaml
-machine:
-    network:
-        kubespan:
-            enabled: true # Enable the KubeSpan feature.
-```
-
-<table>
-  <thead>
-    <tr>
-      <th>Field</th>
-      <th>Type</th>
-      <th>Description</th>
-      <th>Value(s)</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr>
-      <td>`enabled`</td>
-      <td>bool</td>
-      <td>Enable the KubeSpan feature.<br />Cluster discovery should be enabled with .cluster.discovery.enabled for KubeSpan to be enabled.</td>
-      <td></td>
-    </tr>
-    <tr>
-      <td>`advertiseKubernetesNetworks`</td>
-      <td>bool</td>
-      <td>Control whether Kubernetes pod CIDRs are announced over KubeSpan from the node.<br />If disabled, CNI handles encapsulating pod-to-pod traffic into some node-to-node tunnel,<br />and KubeSpan handles the node-to-node traffic.<br />If enabled, KubeSpan will take over pod-to-pod traffic and send it over KubeSpan directly.<br />When enabled, KubeSpan should have a way to detect complete pod CIDRs of the node which<br />is not always the case with CNIs not relying on Kubernetes for IPAM.</td>
-      <td></td>
-    </tr>
-    <tr>
-      <td>`allowDownPeerBypass`</td>
-      <td>bool</td>
-      <td>Skip sending traffic via KubeSpan if the peer connection state is not up.<br />This provides configurable choice between connectivity and security: either traffic is always<br />forced to go via KubeSpan (even if Wireguard peer connection is not up), or traffic can go directly<br />to the peer if Wireguard connection can't be established.</td>
-      <td></td>
-    </tr>
-    <tr>
-      <td>`harvestExtraEndpoints`</td>
-      <td>bool</td>
-      <td>KubeSpan can collect and publish extra endpoints for each member of the cluster<br />based on Wireguard endpoint information for each peer.<br />This feature is disabled by default, don't enable it<br />with high number of peers (>50) in the KubeSpan network (performance issues).</td>
-      <td></td>
-    </tr>
-    <tr>
-      <td>`mtu`</td>
-      <td>uint32</td>
-      <td>KubeSpan link MTU size.<br />Default value is 1420.</td>
-      <td></td>
-    </tr>
-    <tr>
-      <td>`filters`</td>
-      <td><a href="#filters">KubeSpanFilters</a></td>
-      <td>KubeSpan advanced filtering of network addresses .<br /><br />Settings in this section are optional, and settings apply only to the node.</td>
-      <td></td>
-    </tr>
-  </tbody>
-</table>
-
-##### filters
-
-KubeSpanFilters struct describes KubeSpan advanced network addresses filtering.
-
-<table>
-  <thead>
-    <tr>
-      <th>Field</th>
-      <th>Type</th>
-      <th>Description</th>
-      <th>Value(s)</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr>
-      <td>`endpoints`</td>
-      <td>[]string</td>
-      <td>Filter node addresses which will be advertised as KubeSpan endpoints for peer-to-peer Wireguard connections.<br /><br />By default, all addresses are advertised, and KubeSpan cycles through all endpoints until it finds one that works.<br /><br />Default value: no filtering.</td>
       <td></td>
     </tr>
   </tbody>
@@ -1758,6 +1640,12 @@ FlannelCNIConfig represents the Flannel CNI configuration options.
       <td>Extra arguments for 'flanneld'.</td>
       <td></td>
     </tr>
+    <tr>
+      <td>`kubeNetworkPoliciesEnabled`</td>
+      <td>bool</td>
+      <td>Deploys kube-network-policies along with Flannel.<br /><br />This enables Kubernetes Network Policies support in the cluster.</td>
+      <td></td>
+    </tr>
   </tbody>
 </table>
 
@@ -1768,7 +1656,7 @@ APIServerConfig represents the kube apiserver configuration options.
 ```yaml
 cluster:
     apiServer:
-        image: registry.k8s.io/kube-apiserver:v1.35.0 # The container image used in the API server manifest.
+        image: registry.k8s.io/kube-apiserver:v1.36.0-alpha.2 # The container image used in the API server manifest.
         # Extra arguments to supply to the API server.
         extraArgs:
             feature-gates: ServerSideApply=true
@@ -1850,7 +1738,7 @@ cluster:
     </tr>
     <tr>
       <td>`extraArgs`</td>
-      <td>map[string]string</td>
+      <td>Args</td>
       <td>Extra arguments to supply to the API server.</td>
       <td></td>
     </tr>
@@ -2086,7 +1974,7 @@ ControllerManagerConfig represents the kube controller manager configuration opt
 ```yaml
 cluster:
     controllerManager:
-        image: registry.k8s.io/kube-controller-manager:v1.35.0 # The container image used in the controller manager manifest.
+        image: registry.k8s.io/kube-controller-manager:v1.36.0-alpha.2 # The container image used in the controller manager manifest.
         # Extra arguments to supply to the controller manager.
         extraArgs:
             feature-gates: ServerSideApply=true
@@ -2110,7 +1998,7 @@ cluster:
     </tr>
     <tr>
       <td>`extraArgs`</td>
-      <td>map[string]string</td>
+      <td>Args</td>
       <td>Extra arguments to supply to the controller manager.</td>
       <td></td>
     </tr>
@@ -2206,7 +2094,7 @@ ProxyConfig represents the kube proxy configuration options.
 ```yaml
 cluster:
     proxy:
-        image: registry.k8s.io/kube-proxy:v1.35.0 # The container image used in the kube-proxy manifest.
+        image: registry.k8s.io/kube-proxy:v1.36.0-alpha.2 # The container image used in the kube-proxy manifest.
         mode: ipvs # proxy mode of kube-proxy.
         # Extra arguments to supply to kube-proxy.
         extraArgs:
@@ -2246,7 +2134,7 @@ cluster:
     </tr>
     <tr>
       <td>`extraArgs`</td>
-      <td>map[string]string</td>
+      <td>Args</td>
       <td>Extra arguments to supply to kube-proxy.</td>
       <td></td>
     </tr>
@@ -2260,7 +2148,7 @@ SchedulerConfig represents the kube scheduler configuration options.
 ```yaml
 cluster:
     scheduler:
-        image: registry.k8s.io/kube-scheduler:v1.35.0 # The container image used in the scheduler manifest.
+        image: registry.k8s.io/kube-scheduler:v1.36.0-alpha.2 # The container image used in the scheduler manifest.
         # Extra arguments to supply to the scheduler.
         extraArgs:
             feature-gates: AllBeta=true
@@ -2284,7 +2172,7 @@ cluster:
     </tr>
     <tr>
       <td>`extraArgs`</td>
-      <td>map[string]string</td>
+      <td>Args</td>
       <td>Extra arguments to supply to the scheduler.</td>
       <td></td>
     </tr>
@@ -2509,7 +2397,7 @@ EtcdConfig represents the etcd configuration options.
 ```yaml
 cluster:
     etcd:
-        image: registry.k8s.io/etcd:v3.6.7 # The container image used to create the etcd service.
+        image: registry.k8s.io/etcd:v3.6.8 # The container image used to create the etcd service.
         # The `ca` is the root certificate authority of the PKI.
         ca:
             crt: LS0tIEVYQU1QTEUgQ0VSVElGSUNBVEUgLS0t
@@ -2547,7 +2435,7 @@ cluster:
     </tr>
     <tr>
       <td>`extraArgs`</td>
-      <td>map[string]string</td>
+      <td>Args</td>
       <td>Extra arguments to supply to etcd.<br />Note that the following args are not allowed:<br /><br />- `name`<br />- `data-dir`<br />- `initial-cluster-state`<br />- `listen-peer-urls`<br />- `listen-client-urls`<br />- `cert-file`<br />- `key-file`<br />- `trusted-ca-file`<br />- `peer-client-cert-auth`<br />- `peer-cert-file`<br />- `peer-trusted-ca-file`<br />- `peer-key-file`</td>
       <td></td>
     </tr>
@@ -2573,7 +2461,7 @@ CoreDNS represents the CoreDNS config values.
 ```yaml
 cluster:
     coreDNS:
-        image: registry.k8s.io/coredns/coredns:v1.13.2 # The `image` field is an override to the default coredns image.
+        image: registry.k8s.io/coredns/coredns:v1.14.2 # The `image` field is an override to the default coredns image.
 ```
 
 <table>

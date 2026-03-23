@@ -47,7 +47,7 @@ discovery:
     </tr>
     <tr>
       <td>`mount`</td>
-      <td><a href="#mount">MountSpec</a></td>
+      <td><a href="#mount">ExistingMountSpec</a></td>
       <td>The mount describes additional mount options.</td>
       <td></td>
     </tr>
@@ -102,7 +102,7 @@ VolumeSelector selects an existing volume.
 
 ## mount
 
-MountSpec describes how the volume is mounted.
+ExistingMountSpec describes how the volume is mounted.
 
 <table>
   <thead>
@@ -118,6 +118,18 @@ MountSpec describes how the volume is mounted.
       <td>`readOnly`</td>
       <td>bool</td>
       <td>Mount the volume read-only.</td>
+      <td></td>
+    </tr>
+    <tr>
+      <td>`disableAccessTime`</td>
+      <td>bool</td>
+      <td>If true, disable file access time updates.</td>
+      <td></td>
+    </tr>
+    <tr>
+      <td>`secure`</td>
+      <td>bool</td>
+      <td>Enable secure mount options (nosuid, nodev).<br /><br />Defaults to true for better security.</td>
       <td></td>
     </tr>
   </tbody>

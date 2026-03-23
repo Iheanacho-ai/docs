@@ -79,6 +79,12 @@ provisioning:
       <td>The encryption describes how the volume is encrypted.</td>
       <td></td>
     </tr>
+    <tr>
+      <td>`mount`</td>
+      <td><a href="#mount">MountSpec</a></td>
+      <td>The mount describes additional mount options.</td>
+      <td></td>
+    </tr>
   </tbody>
 </table>
 
@@ -382,6 +388,29 @@ EncryptionKeyTPMOptions represents the options for TPM-based key protection.
       <td>`pcrs`</td>
       <td>[]int</td>
       <td>List of PCRs to bind the key to. If not set, defaults to PCR 7, can be disabled by passing an empty list.</td>
+      <td></td>
+    </tr>
+  </tbody>
+</table>
+
+## mount
+
+MountSpec describes how the volume is mounted.
+
+<table>
+  <thead>
+    <tr>
+      <th>Field</th>
+      <th>Type</th>
+      <th>Description</th>
+      <th>Value(s)</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>`secure`</td>
+      <td>bool</td>
+      <td>Enable secure mount options (nosuid, nodev).<br /><br />Defaults to true for better security.</td>
       <td></td>
     </tr>
   </tbody>

@@ -90,7 +90,6 @@ create () {
             govc vm.network.change -vm ${CLUSTER_NAME}-worker-${i} -net "${GOVC_NETWORK}" ethernet-0
         fi
 
-
         govc vm.power -on ${CLUSTER_NAME}-worker-${i}
     done
 

@@ -6,8 +6,8 @@ CONTAINER_NAME := docs-preview
 PORT := 3000
 DOCS_GEN_IMAGE := ghcr.io/siderolabs/docs-gen:latest
 DOCS_CONVERT_IMAGE := ghcr.io/siderolabs/docs-convert:latest
-TALOSCTL_IMAGE := ghcr.io/siderolabs/talosctl:v1.12.1
-TALOS_VERSION := v1.12
+TALOSCTL_IMAGE := ghcr.io/siderolabs/talosctl:v1.13.0-beta.0
+TALOS_VERSION := v1.13
 VALE_IMAGE := jdkato/vale:latest
 VALE_CONFIG ?= .vale.ini
 
@@ -48,6 +48,7 @@ docs.json: common.yaml omni.yaml ## Generate and validate docs.json from multipl
 		talos-v1.8.yaml \
 		talos-v1.7.yaml \
 		talos-v1.6.yaml \
+		talos-v1.13.yaml \
 		omni.yaml \
 		kubernetes-guides.yaml \
 		> public/docs.json
@@ -62,6 +63,7 @@ docs.json-local: common.yaml omni.yaml docs-gen/main.go ## Generate docs.json us
 		../talos-v1.8.yaml \
 		../talos-v1.7.yaml \
 		../talos-v1.6.yaml \
+		../talos-v1.13.yaml \
 		../omni.yaml \
 		../kubernetes-guides.yaml \
 		> ../public/docs.json
@@ -77,6 +79,7 @@ check-missing: ## Check for MDX files not included in config files
 		talos-v1.8.yaml \
 		talos-v1.7.yaml \
 		talos-v1.6.yaml \
+		talos-v1.13.yaml \
 		omni.yaml \
 		kubernetes-guides.yaml 
 
@@ -91,6 +94,7 @@ check-missing-local: ## Check for missing files using local Go build
 		../talos-v1.8.yaml \
 		../talos-v1.7.yaml \
 		../talos-v1.6.yaml \
+		../talos-v1.13.yaml \
 		../omni.yaml \
 		../kubernetes-guides.yaml
 
