@@ -2450,64 +2450,101 @@
                   "talos/v1.13/reference/talosconfig",
                   "talos/v1.13/reference/api",
                   {
-                    "group": "Block",
+                    "group": "Configuration",
                     "pages": [
-                      "talos/v1.13/reference/configuration/block/existingvolumeconfig",
-                      "talos/v1.13/reference/configuration/block/rawvolumeconfig",
-                      "talos/v1.13/reference/configuration/block/swapvolumeconfig",
-                      "talos/v1.13/reference/configuration/block/uservolumeconfig",
-                      "talos/v1.13/reference/configuration/block/volumeconfig",
-                      "talos/v1.13/reference/configuration/block/zswapconfig"
-                    ]
-                  },
-                  {
-                    "group": "CRI",
-                    "pages": [
-                      "talos/v1.13/reference/configuration/cri/registryauthconfig",
-                      "talos/v1.13/reference/configuration/cri/registrymirrorconfig",
-                      "talos/v1.13/reference/configuration/cri/registrytlsconfig"
-                    ]
-                  },
-                  {
-                    "group": "Network",
-                    "pages": [
-                      "talos/v1.13/reference/configuration/network/bondconfig",
-                      "talos/v1.13/reference/configuration/network/bridgeconfig",
-                      "talos/v1.13/reference/configuration/network/dhcpv4config",
-                      "talos/v1.13/reference/configuration/network/dhcpv6config",
-                      "talos/v1.13/reference/configuration/network/dummylinkconfig",
-                      "talos/v1.13/reference/configuration/network/ethernetconfig",
-                      "talos/v1.13/reference/configuration/network/hcloudvipconfig",
-                      "talos/v1.13/reference/configuration/network/hostnameconfig",
-                      "talos/v1.13/reference/configuration/network/kubespanendpointsconfig",
-                      "talos/v1.13/reference/configuration/network/layer2vipconfig",
-                      "talos/v1.13/reference/configuration/network/linkaliasconfig",
-                      "talos/v1.13/reference/configuration/network/linkconfig",
-                      "talos/v1.13/reference/configuration/network/networkdefaultactionconfig",
-                      "talos/v1.13/reference/configuration/network/networkruleconfig",
-                      "talos/v1.13/reference/configuration/network/resolverconfig",
-                      "talos/v1.13/reference/configuration/network/statichostconfig",
-                      "talos/v1.13/reference/configuration/network/timesyncconfig",
-                      "talos/v1.13/reference/configuration/network/vlanconfig",
-                      "talos/v1.13/reference/configuration/network/wireguardconfig"
-                    ]
-                  },
-                  {
-                    "group": "Runtime",
-                    "pages": [
-                      "talos/v1.13/reference/configuration/runtime/eventsinkconfig",
-                      "talos/v1.13/reference/configuration/runtime/kmsglogconfig",
-                      "talos/v1.13/reference/configuration/runtime/oomconfig",
-                      "talos/v1.13/reference/configuration/runtime/watchdogtimerconfig"
-                    ]
-                  },
-                  {
-                    "group": "Misc",
-                    "pages": [
-                      "talos/v1.13/reference/configuration/extensions/extensionserviceconfig",
-                      "talos/v1.13/reference/configuration/hardware/pcidriverrebindconfig",
-                      "talos/v1.13/reference/configuration/security/trustedrootsconfig",
-                      "talos/v1.13/reference/configuration/siderolink/siderolinkconfig"
+                      {
+                        "group": "Block",
+                        "pages": [
+                          "talos/v1.13/reference/configuration/block/existingvolumeconfig",
+                          "talos/v1.13/reference/configuration/block/externalvolumeconfig",
+                          "talos/v1.13/reference/configuration/block/rawvolumeconfig",
+                          "talos/v1.13/reference/configuration/block/swapvolumeconfig",
+                          "talos/v1.13/reference/configuration/block/uservolumeconfig",
+                          "talos/v1.13/reference/configuration/block/volumeconfig",
+                          "talos/v1.13/reference/configuration/block/zswapconfig"
+                        ]
+                      },
+                      {
+                        "group": "CRI",
+                        "pages": [
+                          "talos/v1.13/reference/configuration/cri/registryauthconfig",
+                          "talos/v1.13/reference/configuration/cri/registrymirrorconfig",
+                          "talos/v1.13/reference/configuration/cri/registrytlsconfig"
+                        ]
+                      },
+                      {
+                        "group": "Extensions",
+                        "pages": [
+                          "talos/v1.13/reference/configuration/extensions/extensionserviceconfig"
+                        ]
+                      },
+                      {
+                        "group": "Hardware",
+                        "pages": [
+                          "talos/v1.13/reference/configuration/hardware/pcidriverrebindconfig"
+                        ]
+                      },
+                      {
+                        "group": "Network",
+                        "pages": [
+                          "talos/v1.13/reference/configuration/network/blackholerouteconfig",
+                          "talos/v1.13/reference/configuration/network/bondconfig",
+                          "talos/v1.13/reference/configuration/network/bridgeconfig",
+                          "talos/v1.13/reference/configuration/network/dhcpv4config",
+                          "talos/v1.13/reference/configuration/network/dhcpv6config",
+                          "talos/v1.13/reference/configuration/network/dummylinkconfig",
+                          "talos/v1.13/reference/configuration/network/ethernetconfig",
+                          "talos/v1.13/reference/configuration/network/hcloudvipconfig",
+                          "talos/v1.13/reference/configuration/network/hostnameconfig",
+                          "talos/v1.13/reference/configuration/network/kubespanconfig",
+                          "talos/v1.13/reference/configuration/network/kubespanendpointsconfig",
+                          "talos/v1.13/reference/configuration/network/layer2vipconfig",
+                          "talos/v1.13/reference/configuration/network/linkaliasconfig",
+                          "talos/v1.13/reference/configuration/network/linkconfig",
+                          "talos/v1.13/reference/configuration/network/networkdefaultactionconfig",
+                          "talos/v1.13/reference/configuration/network/networkruleconfig",
+                          "talos/v1.13/reference/configuration/network/resolverconfig",
+                          "talos/v1.13/reference/configuration/network/routingruleconfig",
+                          "talos/v1.13/reference/configuration/network/statichostconfig",
+                          "talos/v1.13/reference/configuration/network/tcpprobeconfig",
+                          "talos/v1.13/reference/configuration/network/timesyncconfig",
+                          "talos/v1.13/reference/configuration/network/vlanconfig",
+                          "talos/v1.13/reference/configuration/network/vrfconfig",
+                          "talos/v1.13/reference/configuration/network/wireguardconfig"
+                        ]
+                      },
+                      {
+                        "group": "Runtime",
+                        "pages": [
+                          "talos/v1.13/reference/configuration/runtime/environmentconfig",
+                          "talos/v1.13/reference/configuration/runtime/eventsinkconfig",
+                          "talos/v1.13/reference/configuration/runtime/kmsglogconfig",
+                          "talos/v1.13/reference/configuration/runtime/oomconfig",
+                          "talos/v1.13/reference/configuration/runtime/watchdogtimerconfig"
+                        ]
+                      },
+                      {
+                        "group": "Misc",
+                        "pages": [
+                          "talos/v1.13/reference/configuration/extensions/extensionserviceconfig",
+                          "talos/v1.13/reference/configuration/hardware/pcidriverrebindconfig",
+                          "talos/v1.13/reference/configuration/security/trustedrootsconfig",
+                          "talos/v1.13/reference/configuration/siderolink/siderolinkconfig"
+                        ]
+                      },
+                      {
+                        "group": "Security",
+                        "pages": [
+                          "talos/v1.13/reference/configuration/security/imageverificationconfig",
+                          "talos/v1.13/reference/configuration/security/trustedrootsconfig"
+                        ]
+                      },
+                      {
+                        "group": "SideroLink",
+                        "pages": [
+                          "talos/v1.13/reference/configuration/siderolink/siderolinkconfig"
+                        ]
+                      }
                     ]
                   }
                 ]
