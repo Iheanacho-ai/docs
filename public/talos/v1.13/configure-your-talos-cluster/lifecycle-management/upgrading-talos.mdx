@@ -73,13 +73,23 @@ as:
 `}
 </CodeBlock>
 
-Rarely, an upgrade command will fail due to a process holding a file open on disk.
-In these cases, you can use the `--stage` flag.
-This puts the upgrade artifacts on disk, and adds some metadata to a disk partition that gets checked very early in the boot process, then reboots the node.
-On the reboot, Talos sees that it needs to apply an upgrade, and will do so immediately.
-Because this occurs in a just rebooted system, there will be no conflict with any files being held open.
-After the upgrade is applied, the node will reboot again, in order to boot into the new version.
 Note that because Talos Linux reboots via the `kexec` syscall, the extra reboot adds very little time.
+
+### Upgrade API changes in Talos v1.13
+
+Talos v1.13 introduces a new streaming upgrade API via `LifecycleService.Upgrade`.
+The `talosctl upgrade` command now uses this new API by default, providing real-time progress reporting and support for parallel upgrades across multiple nodes.
+
+New flags:
+
+* `--progress <mode>` - Controls the output mode for upgrade progress. Values: `auto` (default), `plain`. `auto` uses a dynamic progress reporter if the output is a terminal, and falls back to plain text otherwise. `plain` always uses plain text output.
+* `--namespace <name>` - Containerd namespace to use for the upgrade image. Values: `system` (default), `cri`, `inmem`.
+
+The `--reboot-mode` flag now supports three values: `default`, `powercycle`, and `force`.
+
+> **Deprecation notice**  
+> The legacy upgrade flags (`--force`, `--insecure`, `--preserve`, `--stage`) are deprecated and will be removed in Talos 1.18.
+> These flags are only used when falling back to the legacy `MachineService.Upgrade` API for older Talos versions.
 
 ## Machine configuration changes
 
@@ -149,7 +159,6 @@ In this case, Talos will fail to download the upgraded image and will abort the 
 
 Sometimes, Talos is unable to successfully kill off all of the disk access points, in which case it cannot safely unmount all filesystems to effect the upgrade.
 In this case, it will abort the upgrade and reboot.
-(`upgrade --stage` can ensure that upgrades can occur even when the filesytems cannot be unmounted.)
 
 It is possible (especially with test builds) that the upgraded Talos system will fail to start.
 In this case, the node will be rebooted, and the bootloader will automatically use the previous Talos kernel and image, thus effectively rolling back the upgrade.
