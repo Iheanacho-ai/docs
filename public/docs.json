@@ -2321,6 +2321,7 @@
               {
                 "group": "Security",
                 "pages": [
+                  "talos/v1.13/security/verifying-image-signatures",
                   "talos/v1.13/security/ca-rotation",
                   "talos/v1.13/security/cert-management",
                   "talos/v1.13/security/certificate-authorities",
@@ -2328,7 +2329,7 @@
                   "talos/v1.13/security/machine-config-oauth",
                   "talos/v1.13/security/rbac",
                   "talos/v1.13/security/selinux",
-                  "talos/v1.13/security/verifying-images",
+                  "talos/v1.13/security/source-talos-images",
                   "talos/v1.13/security/talos-security-checklist"
                 ]
               },
