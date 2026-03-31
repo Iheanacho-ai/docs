@@ -93,7 +93,13 @@ The easiest way to get started with SecureBoot is to download the [ISO](https://
 boot it on a UEFI-enabled system which has SecureBoot enabled in setup mode.
 
 The ISO bootloader will enroll the keys in the UEFI firmware, and boot the Talos Linux in SecureBoot mode.
-The install should performed using SecureBoot installer (put it Talos machine configuration): `factory.talos.dev/installer-secureboot/376567988ad370138ad8b2698212367b8edcb69b5fd68c80be1f2ec7d603b4ba:${release_v1_13}`.
+The install should be performed using SecureBoot installer (put it Talos machine configuration):
+
+<CodeBlock>
+{`
+factory.talos.dev/installer-secureboot/376567988ad370138ad8b2698212367b8edcb69b5fd68c80be1f2ec7d603b4ba:${release_v1_13}
+`}
+</CodeBlock>
 
 > Note: SecureBoot images can also be generated with [custom keys](#secureboot-with-custom-keys).
 
