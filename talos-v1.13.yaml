@@ -304,6 +304,7 @@ navigation:
           folder: "talos/v1.13/troubleshooting"
           pages:
             - "troubleshooting.mdx"
+            - "talosctl-debug.mdx"
             - "faqs.mdx"
 
         - group: "Learn more"
