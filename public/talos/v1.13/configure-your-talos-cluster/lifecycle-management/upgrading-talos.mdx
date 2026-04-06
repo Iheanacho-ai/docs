@@ -87,47 +87,26 @@ New flags:
 
 The `--reboot-mode` flag now supports three values: `default`, `powercycle`, and `force`.
 
-> **Deprecation notice**  
+> **Deprecation notice**
 > The legacy upgrade flags (`--force`, `--insecure`, `--preserve`, `--stage`) are deprecated and will be removed in Talos 1.18.
 > These flags are only used when falling back to the legacy `MachineService.Upgrade` API for older Talos versions.
 
 ## Machine configuration changes
 
-* [VolumeConfig](../../reference/configuration/block/volumeconfig) now supports encryption configuration for system volumes.
-* [VolumeConfig](../../reference/configuration/block/volumeconfig), [UserVolumeConfig](../../reference/configuration/block/uservolumeconfig) encryption configuration for TPM now supports specifying PCRs to lock the encryption key to.
-* volume configuration in `.provisioning.maxSize` now supports relative sizes using `%` suffix.
-* [UserVolumeConfig](../../reference/configuration/block/uservolumeconfig) now supports `volumeType` field with `partition` (default), `disk` and `directory` values.
-* new registry-related configuration documents: [RegistryMirrorConfig](../../reference/configuration/cri/registrymirrorconfig),
-  [RegistryAuthConfig](../../reference/configuration/cri/registryauthconfig),
-  and [RegistryTLSConfig](../../reference/configuration/cri/registrytlsconfig).
-* new network configuration documents:
-  * [BondConfig](../../reference/configuration/network/bondconfig)
-  * [BridgeConfig](../../reference/configuration/network/bridgeconfig)
-  * [DHCPv4Config](../../reference/configuration/network/dhcpv4config)
-  * [DHCPv6Config](../../reference/configuration/network/dhcpv6config)
-  * [DummyLinkConfig](../../reference/configuration/network/dummylinkconfig)
-  * [HCloudVIPConfig](../../reference/configuration/network/hcloudvipconfig)
-  * [HostnameConfig](../../reference/configuration/network/hostnameconfig)
-  * [Layer2VIPConfig](../../reference/configuration/network/layer2vipconfig)
-  * [LinkConfig](../../reference/configuration/network/linkconfig)
-  * [LinkAliasConfig](../../reference/configuration/network/linkaliasconfig)
-  * [ResolverConfig](../../reference/configuration/network/resolverconfig)
-  * [StaticHostConfig](../../reference/configuration/network/statichostconfig)
-  * [TimeSyncConfig](../../reference/configuration/network/timesyncconfig)
-  * [VLANConfig](../../reference/configuration/network/vlanconfig)
-  * [WireguardConfig](../../reference/configuration/network/wireguardconfig)
-* [EthernetConfig](../../reference/configuration/network/ethernetconfig) now supports `wakeOnLAN` configuration.
-* new document [OOMConfig](../../reference/configuration/runtime/oomconfig) to configure OOM handler.
-* deprecated, but still supported fields in `valpha1` config:
-  * `.machine.time` (use `TimeSyncConfig` instead)
-  * `.machine.registries` (use `RegistryMirrorConfig`, `RegistryAuthConfig`, and `RegistryTLSConfig` instead)
-  * `.machine.network.hostname` (use `HostnameConfig` instead)
-  * `.machine.network.interfaces` (use `LinkConfig`, `VLANConfig`, `BondConfig`, `BridgeConfig`, etc. instead)
-  * `.machine.network.nameservers`, `.machine.network.searchDomains`, `.machine.network.disableSearchDomain` (use `ResolverConfig` instead)
-  * `.machine.network.extraHostEntries` (use `StaticHostConfig` instead)
-  * `.machine.install.extraKernelArgs` (use Image Factory instead)
-* new `v1alpha` config fields:
-  * `.machine.install.grubUseUKICmdline` to unify kernel args behavior for legacy GRUB bootloader with systemd-boot.
+* [VolumeConfig](../../reference/configuration/block/volumeconfig) and [UserVolumeConfig](../../reference/configuration/block/uservolumeconfig) now support negative byte sizes and percentages to specify space left on the disk
+  after creating a partition.
+* Mount specification in volume configuration has two new fields:
+  * `secure` (defaults to `true`) to enable `nosuid`, `nodev` options;
+  * `disableAccessTime` (defaults to `false`) to enable `noatime` option (performance).
+* New [ExternalVolumeConfig](../../reference/configuration/block/externalvolumeconfig) document to configure external volumes, at the moment `virtiofs` volumes are supported (e.g. Proxmox).
+* New [BlackholeRouteConfig](../../reference/configuration/network/blackholerouteconfig) document to configure blackhole routes.
+* New [KubeSpanConfig](../../reference/configuration/network/kubespanconfig) document which replaces `.machine.network.kubespan` configuration, and adds support for filtering advertised addresses by each node.
+* [LinkAliasConfig](../../reference/configuration/network/linkaliasconfig) now supports creating aliases for multiple matching links if the `name:` has `%d` specifier, e.g. `net%d`.
+* New [RoutingRuleConfig](../../reference/configuration/network/routingruleconfig) document to configure Linux routing rules.
+* New [TCPProbeConfig](../../reference/configuration/network/tcpprobeconfig) document to configure TCP-based connectivity checks (probes).
+* New [VRFConfig](../../reference/configuration/network/vrfconfig) document to configure VRF interfaces.
+* New [EnvironmentConfig](../../reference/configuration/runtime/environmentconfig) document to configure environment variables set on the host.
+* New [ImageVerificationConfig](../../reference/configuration/security/imageverificationconfig) document to configure container [image verification rules](../../security/verifying-image-signatures).
 
 ## Upgrade sequence
 
