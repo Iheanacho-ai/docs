@@ -117,6 +117,20 @@ The discovery service does not have the encryption key.
 The discovery service may, with a commercial license, be operated by your organization and can be [downloaded here](https://github.com/siderolabs/discovery-service).
 In order for nodes to communicate to the discovery service, they must be able to connect to it on TCP port 443.
 
+## Discovery service behavior during outages
+
+Talos nodes periodically refresh their discovery data to prevent it from expiring (TTL-based expiry). As long as the discovery service is reachable, records are continuously renewed.
+
+While a cluster is running, Talos keeps the last known discovery state in memory. A short discovery service outage does not immediately disrupt the cluster. Existing connections, including KubeSpan tunnels, continue to function using cached data.
+
+If a node reboots while the discovery service is unavailable, it loses all in-memory discovery state. In this case, the node cannot publish its own information or retrieve peer data, and is unable to rejoin the cluster or establish KubeSpan connectivity until the Discovery Service becomes available again.
+
+If the outage exceeds the TTL, all discovery records expire. When the discovery service comes back online, it may return an empty dataset. Nodes receiving this update drop their existing peer information, which can temporarily disrupt KubeSpan connectivity.
+
+Recovery is automatic once the discovery service becomes available again. Nodes republish their discovery data, peer information is rebuilt, and connectivity is restored without manual intervention.
+
+<Note>When KubeSpan is enabled, WireGuard keys are generated on boot and not stored to disk. A rebooted node must publish its new public key via the Discovery Service before peers can establish tunnels to it.</Note>
+
 ## Resource definitions
 
 Talos provides resources that can be used to introspect the discovery and KubeSpan features.
