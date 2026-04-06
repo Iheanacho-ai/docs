@@ -2605,7 +2605,7 @@
           {
             "group": "Self Hosted",
             "pages": [
-              "omni/self-hosted/omni-deployment-options",
+              "omni/self-hosted/options-for-running-omni",
               "omni/self-hosted/omni-on-prem-hardware-requirements",
               "omni/self-hosted/run-omni-on-prem",
               "omni/self-hosted/run-an-etcd-cluster",
