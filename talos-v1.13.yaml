@@ -117,8 +117,11 @@ navigation:
                 - "logical/bridge.mdx"
             - group: "Advanced Configuration"
               pages:
+                - "advanced/blackhole.mdx"
                 - "advanced/ethernet-config.mdx"
+                - "advanced/routing-rules.mdx"
                 - "advanced/vip.mdx"
+                - "advanced/vrf.mdx"
                 - "advanced/wireguard.mdx"
             - "corporate-proxies.mdx"
             - "egress-domains.mdx"

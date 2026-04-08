@@ -1,0 +1,26 @@
+---
+title: "Flannel CNI"
+description: "In this guide you will learn about Flannel CNI on Talos."
+---
+
+[Flannel](https://github.com/flannel-io/flannel) is a popular Container Network Interface (CNI) plugin that provides a simple and efficient way to create an overlay network for Kubernetes clusters.
+Flannel is a default CNI installed by Talos Linux, and it can be overridden with other CNI implementations if desired (e.g. [Cilium](./deploying-cilium), [Calico](./deploy-calico), etc.).
+
+Flannel encapsulates the network traffic between pods using VXLAN (Talos default),
+which allows for seamless communication between pods across different nodes in the cluster without requiring any additional configuration on the underlying network infrastructure.
+With Flannel, `kube-proxy` handles the routing of traffic between pods and services, while Flannel manages the overlay network and ensures that pods can communicate with each other regardless of their physical location in the cluster.
+
+Starting with Talos 1.13, Flannel can be configured to support [Network Policies](https://kubernetes.io/docs/concepts/services-networking/network-policies/) by using the following machine configuration patch:
+
+```yaml
+cluster:
+  network:
+    cni:
+      name: flannel
+      flannel:
+        kubeNetworkPoliciesEnabled: true
+```
+
+Network policies allow you to control the traffic flow between pods and services in your Kubernetes cluster, providing an additional layer of security and isolation.
+
+Talos Linux ships with all necessary base CNI plugins for Flannel, so a default Flannel installation done by Talos can be replaced with a custom one based on [Flannel documentation](https://github.com/flannel-io/flannel).

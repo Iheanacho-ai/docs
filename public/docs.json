@@ -2303,8 +2303,11 @@
                   {
                     "group": "Advanced Configuration",
                     "pages": [
+                      "talos/v1.13/networking/advanced/blackhole",
                       "talos/v1.13/networking/advanced/ethernet-config",
+                      "talos/v1.13/networking/advanced/routing-rules",
                       "talos/v1.13/networking/advanced/vip",
+                      "talos/v1.13/networking/advanced/vrf",
                       "talos/v1.13/networking/advanced/wireguard"
                     ]
                   },
@@ -2744,6 +2747,7 @@
           {
             "group": "CNI",
             "pages": [
+              "kubernetes-guides/cni/flannel",
               "kubernetes-guides/cni/deploy-calico",
               "kubernetes-guides/cni/deploying-cilium",
               "kubernetes-guides/cni/multus"
