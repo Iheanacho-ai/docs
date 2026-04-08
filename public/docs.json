@@ -249,6 +249,7 @@
                   "talos/v1.12/security/rbac",
                   "talos/v1.12/security/selinux",
                   "talos/v1.12/security/verifying-images",
+                  "talos/v1.12/security/talos-default-hardening-and-cis-compliance",
                   "talos/v1.12/security/talos-security-checklist"
                 ]
               },
@@ -2337,6 +2338,7 @@
                   "talos/v1.13/security/rbac",
                   "talos/v1.13/security/selinux",
                   "talos/v1.13/security/source-talos-images",
+                  "talos/v1.13/security/talos-default-hardening-and-cis-compliance",
                   "talos/v1.13/security/talos-security-checklist"
                 ]
               },

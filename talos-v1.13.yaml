@@ -144,6 +144,7 @@ navigation:
             - "rbac.mdx"
             - "selinux.mdx"
             - "source-talos-images.mdx"
+            - "talos-default-hardening-and-cis-compliance.mdx"
             - "talos-security-checklist.mdx"
 
         - group: "Build and extend Talos"
