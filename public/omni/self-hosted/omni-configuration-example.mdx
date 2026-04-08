@@ -1,0 +1,81 @@
+---
+title: Omni Configuration Example
+description: An annotated example configuration file for a self-hosted Omni deployment.
+---
+
+This page provides an annotated example configuration file for a typical self-hosted Omni deployment.
+For the full list of configuration options and their descriptions, see the [Omni Configuration](/omni/reference/omni-configuration) reference.
+
+Only fields that differ from the defaults need to be specified. Fields omitted from the configuration file use their default values.
+
+## Example configuration
+
+```yaml
+# Account identification.
+account:
+  id: a1b2c3d4-e5f6-7890-abcd-ef1234567890
+
+# Authentication configuration.
+auth:
+  auth0:
+    enabled: true
+    clientID: your-auth0-client-id
+    domain: your-tenant.auth0.com
+  initialUsers:
+    - admin@example.com
+    - operator@example.com
+  initialServiceAccount:
+    enabled: true
+
+# Service endpoints and TLS configuration.
+services:
+  api:
+    endpoint: 0.0.0.0:443
+    advertisedURL: https://omni.example.com
+    certFile: /etc/omni/tls/tls.crt
+    keyFile: /etc/omni/tls/tls.key
+  kubernetesProxy:
+    endpoint: 0.0.0.0:8095
+    advertisedURL: https://omni-k8s.example.com
+    certFile: /etc/omni/tls/tls.crt
+    keyFile: /etc/omni/tls/tls.key
+  machineAPI:
+    advertisedURL: grpc://omni-siderolink.example.com:8090
+  siderolink:
+    joinTokensMode: strict
+    wireGuard:
+      advertisedEndpoint: 203.0.113.10:50180
+  # Workload proxy allows exposing HTTP services running in managed clusters through Omni.
+  workloadProxy:
+    enabled: true
+    subdomain: proxy
+    useOmniSubdomain: true
+
+# Storage backends.
+storage:
+  default:
+    kind: etcd
+    etcd:
+      embedded: true
+      embeddedDBPath: /var/lib/omni/etcd/
+      privateKeySource: "vault://secret/omni-private-key"
+  sqlite:
+    path: /var/lib/omni/sqlite.db
+
+# Etcd backup configuration with S3 storage.
+etcdBackup:
+  s3Enabled: true
+
+# Feature flags.
+features:
+  enableBreakGlassConfigs: true
+```
+
+## Notes
+
+- Replace placeholder values (Auth0 credentials, domain names, IP addresses, TLS paths) with your actual deployment values.
+- The `account.id` should be a unique UUID generated once for your installation. Do not change it after initial setup.
+- TLS certificate and key files must be valid for the domains used in `advertisedURL` fields.
+- When using workload proxy, you also need a wildcard DNS record and TLS certificate for `*.proxy.omni.example.com`.
+- For S3-based etcd backups, configure the S3 credentials via environment variables as described in the [self-hosted guide](/omni/self-hosted/run-omni-on-prem).
+- For production deployments, see [options for running Omni](/omni/self-hosted/options-for-running-omni) and [running Omni on Kubernetes](/omni/self-hosted/run-omni-on-k8s) for additional guidance.

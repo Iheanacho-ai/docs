@@ -149,6 +149,15 @@ generate-talos-reference-local: ## Generate Talos reference docs using local Go 
 	cd docs-convert && go run main.go ../_out/docs ../public/talos/$(TALOS_VERSION)/reference/configuration/
 	@echo "Reference documentation generated in public/talos/$(TALOS_VERSION)/reference/configuration/"
 
+OMNI_CONFIG_SCHEMA_URL ?= https://raw.githubusercontent.com/siderolabs/omni/refs/heads/main/internal/pkg/config/schema.json
+OMNI_CONFIG_REF_PATH := public/omni/reference/omni-configuration.mdx
+
+.PHONY: generate-omni-config-reference
+generate-omni-config-reference: ## Generate Omni configuration reference docs from JSON schema
+	@echo "Generating Omni configuration reference..."
+	cd omni-config-gen && go run . $(OMNI_CONFIG_SCHEMA_URL) > ../$(OMNI_CONFIG_REF_PATH)
+	@echo "Reference documentation generated at $(OMNI_CONFIG_REF_PATH)"
+
 .PHONY: vale
 vale: ## Run Vale on a file or directory: make vale DOC=public/path/to/file.mdx
 	@if [ -z "$(DOC)" ]; then \

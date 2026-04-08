@@ -2608,6 +2608,7 @@
               "omni/self-hosted/options-for-running-omni",
               "omni/self-hosted/omni-on-prem-hardware-requirements",
               "omni/self-hosted/run-omni-on-prem",
+              "omni/self-hosted/omni-configuration-example",
               "omni/self-hosted/run-an-etcd-cluster",
               "omni/self-hosted/run-omni-on-k8s",
               "omni/self-hosted/run-omni-airgapped",
@@ -2715,6 +2716,7 @@
               "omni/reference/acls",
               "omni/reference/cli",
               "omni/reference/cluster-templates",
+              "omni/reference/omni-configuration",
               "omni/reference/manage-omni-resources-with-omnictl",
               "omni/reference/image-factory-configuration",
               "omni/reference/generating-omnictl-cli-reference"
