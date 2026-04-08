@@ -25,6 +25,9 @@ machine:
 
 Host DNS can be disabled by setting `enabled: false` as well.
 
+> Note: When disabling host DNS, `forwardKubeDNSToHost` must also be set to `false`.
+> Setting `forwardKubeDNSToHost: true` while `hostDNS.enabled` is `false` will result in a configuration validation error.
+
 ## Operations
 
 When enabled, Talos Linux starts a DNS caching server on the host, listening on address `127.0.0.53:53` (both TCP and UDP protocols).
