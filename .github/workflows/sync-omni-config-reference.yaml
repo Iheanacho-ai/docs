@@ -7,24 +7,21 @@ on:
     inputs:
       schema-url:
         description: "Override Omni config schema URL (default: omni main branch)"
+        type: string
+        default: https://raw.githubusercontent.com/siderolabs/omni/refs/heads/main/internal/pkg/config/schema.json
         required: false
 
 jobs:
   sync:
     runs-on: ubuntu-latest
-    permissions:
-      contents: write
-      pull-requests: write
-
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
-
       - name: Install Go
         uses: actions/setup-go@v6
         with:
           go-version-file: omni-config-gen/go.mod
-
+          cache: false
       - name: Regenerate Omni configuration reference
         run: |
           if [ -n "${{ inputs.schema-url }}" ]; then
@@ -32,25 +29,15 @@ jobs:
           else
             make generate-omni-config-reference
           fi
-
       - name: Check for changes
-        id: diff
         run: |
           if git diff --quiet; then
-            echo "changed=false" >> "$GITHUB_OUTPUT"
-          else
-            echo "changed=true" >> "$GITHUB_OUTPUT"
+            echo "Omni configuration reference is up to date."
+            exit 0
           fi
 
-      - name: Create pull request
-        if: steps.diff.outputs.changed == 'true'
-        uses: peter-evans/create-pull-request@v7
-        with:
-          commit-message: "docs: update Omni configuration reference"
-          branch: auto/sync-omni-config-reference
-          title: "docs: update Omni configuration reference"
-          body: |
-            Automated update of the Omni configuration reference page.
-
-            The upstream Omni configuration schema has changed. This PR regenerates the reference documentation to match.
-          delete-branch: true
+          echo "::error::Omni configuration reference is out of date. Run 'make generate-omni-config-reference' and commit the result."
+          echo ""
+          echo "Diff:"
+          git diff
+          exit 1
