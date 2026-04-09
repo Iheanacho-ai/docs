@@ -65,3 +65,5 @@ redirects:
     destination: "/talos/v1.12"
   - source: "/talos/latest/:slug*"
     destination: "/talos/v1.12/:slug*"
+  - source: "/omni/cluster-management/expose-an-http-service-from-a-cluster"
+    destination: "/omni/cluster-management/expose-a-workload-via-service-proxy"

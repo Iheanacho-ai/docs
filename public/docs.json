@@ -71,6 +71,10 @@
     {
       "source": "/talos/latest/:slug*",
       "destination": "/talos/v1.12/:slug*"
+    },
+    {
+      "source": "/omni/cluster-management/expose-an-http-service-from-a-cluster",
+      "destination": "/omni/cluster-management/expose-a-workload-via-service-proxy"
     }
   ],
   "navigation": {
@@ -2673,7 +2677,7 @@
               "omni/cluster-management/create-a-hybrid-cluster",
               "omni/cluster-management/upgrading-clusters",
               "omni/cluster-management/omni-terraform",
-              "omni/cluster-management/expose-an-http-service-from-a-cluster",
+              "omni/cluster-management/expose-a-workload-via-service-proxy",
               "omni/cluster-management/export-a-cluster-template-from-a-cluster-created-in-the-ui",
               "omni/cluster-management/etcd-backups",
               "omni/cluster-management/restore-etcd-of-a-cluster-managed-by-cluster-templates",

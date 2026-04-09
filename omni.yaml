@@ -76,7 +76,7 @@ navigation:
             - "create-a-hybrid-cluster.mdx"
             - "upgrading-clusters.mdx"
             - "omni-terraform.mdx"
-            - "expose-an-http-service-from-a-cluster.mdx"
+            - "expose-a-workload-via-service-proxy.mdx"
             - "export-a-cluster-template-from-a-cluster-created-in-the-ui.mdx"
             - "etcd-backups.mdx"
             - "restore-etcd-of-a-cluster-managed-by-cluster-templates.mdx"
