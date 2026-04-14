@@ -34,6 +34,8 @@ Two "flavors" of these kernel modules are provided, and both are available for u
 
 The choice between Proprietary/OSS may be decided after referencing the Official [NVIDIA announcement](https://developer.nvidia.com/blog/nvidia-transitions-fully-towards-open-source-gpu-kernel-modules/).
 
+<Tip>Some hardware may require additional system configuration and will not work with OSS drivers. Grace Blackwell (GB10) devices running with arm64 CPUs like the Nvidia DGX Spark require [Nvidia proprietary drivers](./nvidia-gpu-proprietary).</Tip>
+
 ## Enabling the NVIDIA OSS modules
 
 Patch Talos machine configuration using the patch `gpu-worker-patch.yaml`:

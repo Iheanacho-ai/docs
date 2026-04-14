@@ -18,8 +18,6 @@ We will be using the following NVIDIA system extensions:
 - `nonfree-kmod-nvidia`
 - `nvidia-container-toolkit`
 
-> To build a NVIDIA driver version not published by SideroLabs follow the instructions [here](./nvidia-gpu-proprietary)
-
 Create the [boot assets](../../platform-specific-installations/boot-assets) which includes the system extensions mentioned above (or create a custom installer and perform a machine upgrade if Talos is already installed).
 
 > Make sure the driver version matches for both the `nonfree-kmod-nvidia` and `nvidia-container-toolkit` extensions.
@@ -35,6 +33,8 @@ Two "flavors" of these kernel modules are provided, and both are available for u
   With every driver release, the source code to the open kernel modules is published on https://github.com/NVIDIA/open-gpu-kernel-modules and a tarball is provided on https://download.nvidia.com/XFree86/.
 
 The choice between Proprietary/OSS may be decided after referencing the Official [NVIDIA announcement](https://developer.nvidia.com/blog/nvidia-transitions-fully-towards-open-source-gpu-kernel-modules/).
+
+<Tip>Some hardware may require additional system configuration. Grace Blackwell (GB10) devices running with arm64 CPUs like the Nvidia DGX Spark require setting `arm64.nobti` as a kernel argument. Without this configuration the system may crash or CUDA libraries will not load.</Tip>
 
 ## Enabling the NVIDIA modules and the system extension
 
