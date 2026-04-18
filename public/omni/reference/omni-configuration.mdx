@@ -239,7 +239,7 @@ Siderolink contains SideroLink service configuration. It is the service responsi
     <tr>
       <td style={{whiteSpace: 'nowrap', padding: '8px'}}>`joinTokensMode`</td>
       <td style={{whiteSpace: 'nowrap', padding: '8px'}}>string</td>
-      <td>JoinTokensMode configures how machine join tokens are generated and used. Set to strict to use the secure join tokens mode. Values: `strict`, `legacyAllowed`, `legacy`.<br />**CLI flag:** `--join-tokens-mode`<br />**Default:** `legacy`</td>
+      <td>JoinTokensMode configures how machine join tokens are generated and used. Set to strict to use the secure join tokens mode. Values: `strict`, `legacyAllowed`, `legacy`.<br />**CLI flag:** `--join-tokens-mode`<br />**Default:** `legacyAllowed`</td>
     </tr>
     <tr>
       <td style={{whiteSpace: 'nowrap', padding: '8px'}}>`disableLastEndpoint`</td>
@@ -1353,6 +1353,32 @@ NonImageFactoryDeprecation contains configuration for the notification shown whe
       <td style={{whiteSpace: 'nowrap', padding: '8px'}}>`body`</td>
       <td style={{whiteSpace: 'nowrap', padding: '8px'}}>string</td>
       <td>Body is the body of the non-ImageFactory deprecation notification. Use %d as a placeholder for the number of affected machines.<br />**CLI flag:** `--non-image-factory-deprecation-body`<br />**Default:** `%d machine(s) were provisioned without ImageFactory. Support for these machines will end after a future release. Please re-provision them using ImageFactory.`</td>
+    </tr>
+  </tbody>
+</table>
+
+## eulaAccept
+
+EulaAccept contains the identity of the person accepting the EULA via CLI flags or config.
+
+<table>
+  <thead>
+    <tr>
+      <th>Field</th>
+      <th>Type</th>
+      <th>Description</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td style={{whiteSpace: 'nowrap', padding: '8px'}}>`name`</td>
+      <td style={{whiteSpace: 'nowrap', padding: '8px'}}>string</td>
+      <td>Name is the full name of the person accepting the EULA on behalf of this Omni instance.<br />**CLI flag:** `--eula-accept-name`</td>
+    </tr>
+    <tr>
+      <td style={{whiteSpace: 'nowrap', padding: '8px'}}>`email`</td>
+      <td style={{whiteSpace: 'nowrap', padding: '8px'}}>string</td>
+      <td>Email is the email address of the person accepting the EULA on behalf of this Omni instance.<br />**CLI flag:** `--eula-accept-email`</td>
     </tr>
   </tbody>
 </table>
