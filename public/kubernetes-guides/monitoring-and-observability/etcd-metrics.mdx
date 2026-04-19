@@ -11,10 +11,10 @@ Here's how to do it:
 
     ```shell
     cat << EOF > etcd-metrics-patch.yaml
-    - op: add
-      path: /cluster/etcd/extraArgs
-      value:
-        listen-metrics-urls: http://0.0.0.0:2381
+    cluster:
+      etcd:
+        extraArgs:
+          listen-metrics-urls: http://0.0.0.0:2381
     EOF
     ```
 
