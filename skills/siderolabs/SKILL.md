@@ -6,7 +6,6 @@ compatibility: Requires talosctl and/or omnictl. Talos is API-driven and does no
 metadata:
   author: siderolabs
   version: "1.0"
-  mintlify-proj: siderolabs
 ---
 
 # SideroLabs best practices
