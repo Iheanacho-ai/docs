@@ -45,7 +45,33 @@ Talos v1.13 onwards now supports NVIDIA GPU via the gpu-operator.
 ### NVIDIA GPU users
 
 Talos 1.13 now supports configuring NVIDIA GPU via the gpu-operator.
-It's recommended to uninstall the nvidia-device-plugin helm chart and follow the instructions in [NVIDIA GPU (OSS drivers)](../hardware-and-drivers/nvidia-gpu) or [NVIDIA GPU (Proprietary drivers)](../hardware-and-drivers/nvidia-gpu-proprietary) guide to switch to the new gpu-operator based configuration.
+
+If using NVIDIA GPU on DGX systems, use the proprietary driver guide [here](../hardware-and-drivers/nvidia-gpu-proprietary).
+DGX systems are only known to work with the proprietary driver as of now.
+
+Before upgrading to Talos 1.13, uninstall the nvidia-device-plugin helm chart and delete the nvidia runtimeclass.
+
+Uninstall the nvidia-device-plugin helm chart:
+
+First list all helm installs:
+
+```bash
+helm list -A
+```
+
+Find the helm release for the nvidia-device-plugin and uninstall it:
+
+```bash
+helm uninstall -n <namespace> <release-name>
+```
+
+Now delete the nvidia runtimeclass:
+
+```bash
+kubectl delete runtimeclass nvidia
+```
+
+Now follow the instructions in [NVIDIA GPU (OSS drivers)](../hardware-and-drivers/nvidia-gpu) or [NVIDIA GPU (Proprietary drivers)](../hardware-and-drivers/nvidia-gpu-proprietary) guide to switch to the new gpu-operator based configuration.
 
 ## Video walkthrough
 

@@ -99,31 +99,20 @@ kubectl create ns gpu-operator
 kubectl label --overwrite ns gpu-operator pod-security.kubernetes.io/enforce=privileged
 ```
 
+> Note: Make sure to install GPU operator version v26.3.1 or higher
+
 ```bash
 helm repo add nvidia https://helm.ngc.nvidia.com/nvidia
 helm repo update
 helm upgrade --wait  --install -n gpu-operator gpu-operator nvidia/gpu-operator \
   --set driver.enabled=false \
   --set toolkit.enabled=false \
-  --set hostPaths.driverInstallDir=/usr/local/glibc/usr/lib
+  --set hostPaths.driverInstallDir=/usr/local
 ```
 
-The helm chart will create a runtimeclass named `nvidia` which can be used to schedule GPU workloads.
+### Verification
 
-### Testing the runtime class
-
-> Note the `spec.runtimeClassName` being explicitly set to `nvidia` in the pod spec.
-
-Run the following command to test the runtime class:
-
-```bash
-kubectl run \
-  nvidia-test \
-  --restart=Never \
-  -ti --rm \
-  --image nvcr.io/nvidia/k8s/cuda-sample:vectoradd-cuda12.5.0 \
-  --overrides '{"spec": {"runtimeClassName": "nvidia"}}'
-```
+Follow the [upstream instructions](https://docs.nvidia.com/datacenter/cloud-native/gpu-operator/latest/getting-started.html#verification-running-sample-gpu-applications) to verify the GPU operator installation.
 
 ## Collecting NVIDIA GPU debug data
 
