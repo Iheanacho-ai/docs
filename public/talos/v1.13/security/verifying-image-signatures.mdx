@@ -34,11 +34,18 @@ rules:
       keyless:
         issuer: https://accounts.google.com
         subjectRegex: '(@siderolabs\.com$|^releasemgr-svc@talos-production\.iam\.gserviceaccount\.com$)'
+    - image: factory.talos.dev/*
+      keyless:
+        issuer: https://accounts.google.com
+        subject: image-factory-signing@talos-production.iam.gserviceaccount.com
 ```
 
 In the example above, the first rule matches all images from `registry.k8s.io` and requires them to be signed by the Kubernetes release engineering team service account,
 while the second rule matches all images from `ghcr.io/siderolabs` and requires them to be signed by a Sidero Labs employee or the Talos production release manager service account.
-Any other images that do not match either of the rules will be allowed by default.
+For the images from `factory.talos.dev` (Image Factory), the third rule requires them to be signed by the Talos production image factory service account.
+Any other images that do not match any of the rules will be allowed by default.
+This example set of rules can be used as a starting point for the image signature verification policy, and it can be customized to fit the specific needs of the cluster and the organization.
+These rules cover all images used by Talos Linux itself by default, so they can be used as a base policy for the cluster and then additional rules can be added for the workloads running in the cluster.
 
 It is also possible to create a closed policy that rejects all images that do not match any of the rules by adding a final rule with `deny: true`:
 
