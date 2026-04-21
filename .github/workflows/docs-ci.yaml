@@ -9,10 +9,6 @@ on:
       - "**/*.md"
       - "**/*.mdx"
       - "Makefile"
-  push:
-    branches:
-      - main
-
 jobs:
   docs-checks:
     runs-on: ubuntu-latest
