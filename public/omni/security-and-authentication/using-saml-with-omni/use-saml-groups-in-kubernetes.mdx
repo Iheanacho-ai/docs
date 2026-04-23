@@ -23,9 +23,7 @@ For example:
 --auth-saml-label-rules='{"membership": "groups"}'
 ```
 
-```
---auth-saml-label-rules='{"membership" : "groups" }'
-```
+Alternatively, you can configure these options using a configuration file instead of CLI flags. See [SAML](../../reference/omni-configuration#saml) in the Omni Configuration Examples.
 
 This will extract value from the SAML attribute `memberhip` into the Omni user's identity resource label with the 
 prefix `saml.omni.sidero.dev/groups`

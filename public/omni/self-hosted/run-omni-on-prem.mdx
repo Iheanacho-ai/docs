@@ -287,9 +287,9 @@ mkdir -p $HOME/sqlite
 
 ### 7.3: Start Omni
 
-Choose the etcd mode that matches your setup.
+Choose the etcd mode that matches your setup. Embedded etcd is suitable for a single Omni instance. External etcd is required for high availability or if you need to manage the datastore independently.
 
-Embedded etcd is suitable for a single Omni instance. External etcd is required for high availability or if you need to manage the datastore independently.
+The commands below use CLI flags to start Omni. If you prefer to use a configuration file instead, see [Omni configuration Examples](../reference/omni-configuration).
 
 <Tabs>
   <Tab title="Embedded etcd (default)">
