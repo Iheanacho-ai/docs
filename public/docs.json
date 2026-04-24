@@ -2781,7 +2781,8 @@
             "group": "Monitoring \u0026 Observability",
             "pages": [
               "kubernetes-guides/monitoring-and-observability/deploy-metrics-server",
-              "kubernetes-guides/monitoring-and-observability/etcd-metrics"
+              "kubernetes-guides/monitoring-and-observability/etcd-metrics",
+              "kubernetes-guides/monitoring-and-observability/deploy-datadog"
             ]
           },
           {

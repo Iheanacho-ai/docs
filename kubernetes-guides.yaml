@@ -36,6 +36,7 @@ navigation:
           pages:
             - "deploy-metrics-server.mdx"
             - "etcd-metrics.mdx"
+            - "deploy-datadog.mdx"
 
         - group: "Advanced Guides"
           folder: "kubernetes-guides/advanced-guides"
