@@ -153,6 +153,8 @@ cat <<EOF > wildcard-csr.json
 EOF
 ```
 
+<Tip>If you plan to use [workload proxy](./enable-workload-proxy), add a wildcard SAN for your proxy domain to the `hosts` array now to avoid regenerating the certificate later. The exact value depends on your domain layout. See [Choose your domain layout](./enable-workload-proxy#step-2-choose-your-domain-layout).</Tip>
+
 Sign the certificate using the CA and configuration from the previous steps:
 
 ```bash

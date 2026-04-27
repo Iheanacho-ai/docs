@@ -26,6 +26,8 @@ You can use acme or certbot to generate certificates for your domain. In the fol
 
 ### Nginx configuration
 
+<Tip>If you plan to use workload proxy, you'll need an extra server block for the wildcard domain. See the [nginx routing section](./enable-workload-proxy#nginx) of the Enable Workload Proxy guide.</Tip>
+
 Use the following configuration to expose omni with nginx. Make sure to change the domain name (`$OMNI_DOMAIN`) to your own domain and to update the certificate paths if applicable.
 
 ```nginx

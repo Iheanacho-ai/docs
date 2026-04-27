@@ -25,6 +25,7 @@ navigation:
             - "omni-on-prem-hardware-requirements.mdx"
             - "run-omni-on-prem.mdx"
             - "omni-configuration-example.mdx"
+            - "enable-workload-proxy.mdx"
             - "run-an-etcd-cluster.mdx"
             - "run-omni-on-k8s.mdx"
             - "run-omni-airgapped.mdx"

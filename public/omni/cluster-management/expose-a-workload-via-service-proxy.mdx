@@ -7,6 +7,8 @@ Omni's workload service proxying feature lets you expose HTTP services running i
 
 Exposed services are protected by Omni's authentication, so only users with at least `Reader` access to the cluster can access them. This is useful for cluster-internal tools like Grafana or the Kubernetes dashboard that you want to access without setting up a separate ingress or VPN.
 
+On self-hosted Omni, workload proxy requires DNS, TLS, and routing to be configured before it works. See [Enable Workload Proxy](../self-hosted/enable-workload-proxy).
+
 To expose a workload via service proxy you must:
 
 - Enable workload service proxying on the cluster.
