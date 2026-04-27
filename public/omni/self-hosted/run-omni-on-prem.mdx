@@ -285,7 +285,55 @@ This command creates the directory on the host that will be mounted into the con
 mkdir -p $HOME/sqlite
 ```
 
-### 7.3: Start Omni
+### 7.3: Configure EULA acceptance
+
+Self-hosted Omni requires the first user to accept the End User License Agreement (EULA) before the instance can be used. Until the EULA is accepted, all UI and CLI actions are blocked at the API level.
+
+You can accept the EULA programmatically when starting Omni by using CLI flags or a configuration file, or you can complete acceptance through the Omni UI after **Step 9**. Choose the method that best fits your deployment workflow.
+
+<Note>
+If your organization has a separate agreement with Sidero Labs, that agreement takes precedence and the EULA does not apply.
+</Note>
+
+<Tabs>
+  <Tab title="CLI flags">
+
+  You can pass your EULA details as CLI flags when starting your Omni instance in **Step 7.4**:
+
+  ```bash
+  --eula-accept-name="John Doe"
+  --eula-accept-email="john@doe.com"
+  ```
+  
+  You can also store this information as environment variables and pass them to your Omni instance. Replace the placeholders with your own values:
+
+  ```bash
+  export EULA_NAME="Your Name"
+  export EULA_EMAIL="your@email.com"
+  ```
+
+  </Tab>
+  <Tab title="Configuration file">
+
+  If you prefer to configure EULA acceptance using the Omni configuration file, and you are passing the configuration using the `--config-path` flag, add the following to your configuration file instead. Replace the placeholders with your own values:
+ 
+  ```yaml
+  eulaAccept:
+    name: Your Name
+    email: your@email.com
+  ```
+ 
+  See the [Omni configuration reference](../reference/omni-configuration) for the full list of supported options.
+  
+  </Tab>
+  <Tab title="UI">
+  If you prefer to accept the EULA through the browser, skip this step and continue to **Step 7.4** without the EULA flags.
+
+  When you open the Omni UI in **Step 9.4**, Omni redirects you to `/eula`, where you must complete EULA acceptance before you can log in.
+  </Tab>
+</Tabs>
+
+### 7.4: Start Omni
 
 Choose the etcd mode that matches your setup. Embedded etcd is suitable for a single Omni instance. External etcd is required for high availability or if you need to manage the datastore independently.
 
@@ -330,7 +378,9 @@ docker run -d \
     --auth-oidc-scopes=profile \
     --auth-oidc-scopes=email \
     --sqlite-storage-path=/_out/sqlite/omni.db \
-    --initial-users=${OMNI_USER_EMAIL}
+    --initial-users=${OMNI_USER_EMAIL} \
+    --eula-accept-name="${EULA_NAME}" \
+    --eula-accept-email="${EULA_EMAIL}"
 ```
   </Tab>
   <Tab title="External etcd">
@@ -388,7 +438,9 @@ docker run -d \
       --auth-oidc-scopes=profile \
       --auth-oidc-scopes=email \
       --sqlite-storage-path=/_out/sqlite/omni.db \
-      --initial-users=${OMNI_USER_EMAIL}
+      --initial-users=${OMNI_USER_EMAIL} \
+      --eula-accept-name="${EULA_NAME}" \
+      --eula-accept-email="${EULA_EMAIL}"
   ```
 
   </Tab>
