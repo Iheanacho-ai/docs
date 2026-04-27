@@ -2677,6 +2677,7 @@
                 ]
               },
               "omni/cluster-management/create-a-hybrid-cluster",
+              "omni/cluster-management/sync-kubernetes-manifests",
               "omni/cluster-management/upgrading-clusters",
               "omni/cluster-management/omni-terraform",
               "omni/cluster-management/expose-a-workload-via-service-proxy",

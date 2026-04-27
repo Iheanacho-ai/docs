@@ -74,6 +74,7 @@ navigation:
                 - "scale-your-cluster/cluster-autoscaler-aws"
                 - "scale-your-cluster/karpenter"
             - "create-a-hybrid-cluster.mdx"
+            - "sync-kubernetes-manifests.mdx"
             - "upgrading-clusters.mdx"
             - "omni-terraform.mdx"
             - "expose-a-workload-via-service-proxy.mdx"
