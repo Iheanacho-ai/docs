@@ -136,12 +136,6 @@ This includes fields such as `.cluster.apiServer.extraArgs`.
 
 > Note: If you were relying on the resources EtcdConfigs, KubeletConfigs, ControllerManagerConfigs, SchedulerConfigs or APIServerConfigs, the protobuf format has changed from `map<string,string>` to `map<string,message>`.
 
-### Service Account Issuer
-
-In API Server, passing extra args with `service-account-issuer` will append them after default value.
-This allows easy migration, e.g. by changing `.cluster.controlPlane.endpoint` to new value, and keeping the old value in
-`.cluster.apiServer.extraArgs["service-account-issuer"]`.
-
 ## Miscellaneous
 
 ### Linux Kernel built with ThinLTO
@@ -219,14 +213,14 @@ If those are set to `false`, the command will not attempt to reach out to the co
 
 ## Component Updates
 
-* Linux: 6.18.19
-* containerd: 2.2.2
+* Linux: 6.18.24
+* containerd: 2.2.3
 * runc: 1.4.2
 * etcd: 3.6.9
 * CoreDNS: 1.14.2
 * Kubernetes: 1.36.0
 * CNI: 1.9.1
-* Flannel CNI plugin: v1.9.0-flannel1
+* Flannel CNI plugin: v1.9.1-flannel1
 * Flannel: 0.28.2
 * LVM2: 2_03_38
 * systemd: 259.5

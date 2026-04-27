@@ -62,8 +62,8 @@ integrations:
 
 redirects:
   - source: "/talos/latest"
-    destination: "/talos/v1.12"
+    destination: "/talos/v1.13"
   - source: "/talos/latest/:slug*"
-    destination: "/talos/v1.12/:slug*"
+    destination: "/talos/v1.13/:slug*"
   - source: "/omni/cluster-management/expose-an-http-service-from-a-cluster"
     destination: "/omni/cluster-management/expose-a-workload-via-service-proxy"

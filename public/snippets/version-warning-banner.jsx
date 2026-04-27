@@ -1,5 +1,5 @@
 export const VersionWarningBanner = () => {
-  const latestVersion = "v1.12";
+  const latestVersion = "v1.13";
 
   const [latestUrl, setLatestUrl] = useState(null);
   const [currentVersion, setCurrentVersion] = useState(null);
@@ -53,7 +53,7 @@ export const VersionWarningBanner = () => {
         <div className="text-sm">
           {isBeta ? (
             <>
-              ⚠️ You are viewing a <strong>beta version</strong> of Talos ({currentVersion}). 
+              ⚠️ You are viewing a <strong>beta version</strong> of Talos ({currentVersion}).
               This version may be unstable.
               <a
                 href={latestUrl}
