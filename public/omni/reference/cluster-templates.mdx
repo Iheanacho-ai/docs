@@ -130,6 +130,7 @@ kernelArgs:
 | `labels`                                | map[string]string        | Labels to be applied to the cluster.                                                                                                                                                                                        |
 | `annotations`                           | map[string]string        | Annotations to be applied to the cluster.                                                                                                                                                                                   |
 | `kubernetes.version`                    | string                   | Kubernetes version to use, `vA.B.C`.                                                                                                                                                                                        |
+| `kubernetes.manifests`                  | array[Manifest]          | List of Kubernetes manifests to deploy and sync to the cluster. Each entry is applied independently. See [Sync Kubernetes Manifests](../cluster-management/sync-kubernetes-manifests).                                                                                         |
 | `talos.version`                         | string                   | Talos version to use, `vA.B.C`.                                                                                                                                                                                             |
 | `features.enableWorkloadProxy`          | boolean                  | Whether to enable the workload proxy feature.<br/>Defaults to `false`.                                                                                                                                                      |
 | `features.useEmbeddedDiscoveryService`  | boolean                  | Whether to use the embedded discovery service that runs inside the Omni instance instead of the public one (`discovery.talos.dev`).<br/>Defaults to `false`. It is only valid if the Omni instance has the feature enabled. |
@@ -331,6 +332,19 @@ patches:
 | `inline`      | object            | Inline patch containing Talos machine configuration strategic patch.                                                                                                     |
 
 A configuration patch may be either `inline` or `file` based. Inline patches are useful for small changes, while file-based patches are useful for more complex changes or changes shared across multiple clusters.
+
+### `kubernetes.manifests`
+
+The `manifests` field under `kubernetes` in the `Cluster` document lets you define Kubernetes workloads to deploy directly from the cluster template. Omni stores the manifest data and synchronizes it to the cluster once the Kubernetes API is available and the cluster is healthy.
+
+| Field | Type | Description |
+|:------|:-----|:------------|
+| `name` | string | Unique name for this manifest entry. |
+| `mode` | string | Sync mode. `one-time` applies the manifest once after bootstrapping. `full` continuously reconciles the manifest state. |
+| `inline` | array[object] | List of inline Kubernetes resource definitions.|
+| `file` | string | Path to an external YAML file, relative to the working directory when running `omnictl`.|
+
+For full usage details and examples, see [Sync Kubernetes Manifests](../cluster-management/sync-kubernetes-manifests).
 
 ### `kernelArgs`
 
