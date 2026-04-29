@@ -6,6 +6,7 @@ CONTAINER_NAME := docs-preview
 PORT := 3000
 DOCS_GEN_IMAGE := ghcr.io/siderolabs/docs-gen:latest
 DOCS_CONVERT_IMAGE := ghcr.io/siderolabs/docs-convert:latest
+CHANGELOG_GEN_IMAGE := ghcr.io/siderolabs/changelog-gen:latest
 TALOSCTL_IMAGE := ghcr.io/siderolabs/talosctl:v1.13.0
 TALOS_VERSION := v1.13
 VALE_IMAGE := jdkato/vale:latest
@@ -51,6 +52,7 @@ docs.json: common.yaml omni.yaml ## Generate and validate docs.json from multipl
 		talos-v1.6.yaml \
 		omni.yaml \
 		kubernetes-guides.yaml \
+		changelog.yaml \
 		> public/docs.json
 
 docs.json-local: common.yaml omni.yaml docs-gen/main.go ## Generate docs.json using local Go build
@@ -66,6 +68,7 @@ docs.json-local: common.yaml omni.yaml docs-gen/main.go ## Generate docs.json us
 		../talos-v1.6.yaml \
 		../omni.yaml \
 		../kubernetes-guides.yaml \
+		../changelog.yaml \
 		> ../public/docs.json
 
 .PHONY: check-missing
@@ -81,7 +84,8 @@ check-missing: ## Check for MDX files not included in config files
 		talos-v1.7.yaml \
 		talos-v1.6.yaml \
 		omni.yaml \
-		kubernetes-guides.yaml
+		kubernetes-guides.yaml \
+		changelog.yaml
 
 .PHONY: check-missing-local
 check-missing-local: ## Check for missing files using local Go build
@@ -96,7 +100,8 @@ check-missing-local: ## Check for missing files using local Go build
 		../talos-v1.7.yaml \
 		../talos-v1.6.yaml \
 		../omni.yaml \
-		../kubernetes-guides.yaml
+		../kubernetes-guides.yaml \
+		../changelog.yaml
 
 .PHONY: generate-deps
 generate-deps: ## Install Go dependencies for the generator
@@ -182,3 +187,14 @@ vale-changed: ## Run Vale on changed file vs HEAD
 	echo "Linting changed files:" $$files; \
 	docker run --rm -v $(PWD):/work -w /work $(VALE_IMAGE) \
 		--config="$(VALE_CONFIG)" $(VALE_ARGS) $$files
+
+.PHONY: changelog
+changelog: ## Generate the changelog from GitHub releases
+	docker pull $(CHANGELOG_GEN_IMAGE)
+	docker run --rm -v $(PWD):/workspace -w /workspace \
+		-e GITHUB_TOKEN=$(GITHUB_TOKEN) \
+		$(CHANGELOG_GEN_IMAGE) --output public/changelog/changelog.mdx
+
+.PHONY: changelog-local
+changelog-local: ## Generate the changelog using local Go build
+	cd changelog-gen && go run . --output ../public/changelog/changelog.mdx
