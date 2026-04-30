@@ -1,0 +1,2060 @@
+---
+title: Omni API
+description: Omni gRPC API reference.
+---
+
+## Table of Contents
+
+- [management/management.proto](#management/management.proto)
+    - [KubeconfigResponse](#management.KubeconfigResponse)
+    - [TalosconfigResponse](#management.TalosconfigResponse)
+    - [OmniconfigResponse](#management.OmniconfigResponse)
+    - [MachineLogsRequest](#management.MachineLogsRequest)
+    - [ValidateConfigRequest](#management.ValidateConfigRequest)
+    - [TalosconfigRequest](#management.TalosconfigRequest)
+    - [CreateServiceAccountRequest](#management.CreateServiceAccountRequest)
+    - [CreateServiceAccountResponse](#management.CreateServiceAccountResponse)
+    - [RenewServiceAccountRequest](#management.RenewServiceAccountRequest)
+    - [RenewServiceAccountResponse](#management.RenewServiceAccountResponse)
+    - [DestroyServiceAccountRequest](#management.DestroyServiceAccountRequest)
+    - [ListServiceAccountsResponse](#management.ListServiceAccountsResponse)
+    - [ServiceAccount](#management.ListServiceAccountsResponse.ServiceAccount)
+    - [PgpPublicKey](#management.ListServiceAccountsResponse.ServiceAccount.PgpPublicKey)
+    - [KubeconfigRequest](#management.KubeconfigRequest)
+    - [KubernetesUpgradePreChecksRequest](#management.KubernetesUpgradePreChecksRequest)
+    - [KubernetesUpgradePreChecksResponse](#management.KubernetesUpgradePreChecksResponse)
+    - [KubernetesSSAOptions](#management.KubernetesSSAOptions)
+    - [KubernetesSyncManifestRequest](#management.KubernetesSyncManifestRequest)
+    - [KubernetesSyncManifestResponse](#management.KubernetesSyncManifestResponse)
+    - [CreateSchematicRequest](#management.CreateSchematicRequest)
+    - [Overlay](#management.CreateSchematicRequest.Overlay)
+    - [CreateSchematicResponse](#management.CreateSchematicResponse)
+    - [GetSupportBundleRequest](#management.GetSupportBundleRequest)
+    - [GetSupportBundleResponse](#management.GetSupportBundleResponse)
+    - [Progress](#management.GetSupportBundleResponse.Progress)
+    - [ReadAuditLogRequest](#management.ReadAuditLogRequest)
+    - [ReadAuditLogResponse](#management.ReadAuditLogResponse)
+    - [ValidateJsonSchemaRequest](#management.ValidateJsonSchemaRequest)
+    - [ValidateJsonSchemaResponse](#management.ValidateJsonSchemaResponse)
+    - [Error](#management.ValidateJsonSchemaResponse.Error)
+    - [MaintenanceUpgradeRequest](#management.MaintenanceUpgradeRequest)
+    - [MaintenanceUpgradeResponse](#management.MaintenanceUpgradeResponse)
+    - [GetMachineJoinConfigRequest](#management.GetMachineJoinConfigRequest)
+    - [GetMachineJoinConfigResponse](#management.GetMachineJoinConfigResponse)
+    - [GenJoinTokenResponse](#management.GenJoinTokenResponse)
+    - [CreateJoinTokenRequest](#management.CreateJoinTokenRequest)
+    - [CreateJoinTokenResponse](#management.CreateJoinTokenResponse)
+    - [ResetNodeUniqueTokenRequest](#management.ResetNodeUniqueTokenRequest)
+  
+    - [SchematicBootloader](#management.SchematicBootloader)
+    - [AuditLogEventType](#management.AuditLogEventType)
+    - [AuditLogOrderByField](#management.AuditLogOrderByField)
+    - [AuditLogOrderByDir](#management.AuditLogOrderByDir)
+    - [InventoryPolicy](#management.KubernetesSSAOptions.InventoryPolicy)
+    - [ResponseType](#management.KubernetesSyncManifestResponse.ResponseType)
+    - [SiderolinkGRPCTunnelMode](#management.CreateSchematicRequest.SiderolinkGRPCTunnelMode)
+  
+    - [ManagementService](#management.ManagementService)
+  
+- [oidc/oidc.proto](#oidc/oidc.proto)
+    - [AuthenticateRequest](#oidc.AuthenticateRequest)
+    - [AuthenticateResponse](#oidc.AuthenticateResponse)
+  
+    - [OIDCService](#oidc.OIDCService)
+  
+- [resources/resources.proto](#resources/resources.proto)
+    - [Resource](#omni.resources.Resource)
+    - [GetRequest](#omni.resources.GetRequest)
+    - [GetResponse](#omni.resources.GetResponse)
+    - [ListRequest](#omni.resources.ListRequest)
+    - [ListResponse](#omni.resources.ListResponse)
+    - [Event](#omni.resources.Event)
+    - [WatchRequest](#omni.resources.WatchRequest)
+    - [WatchResponse](#omni.resources.WatchResponse)
+    - [CreateRequest](#omni.resources.CreateRequest)
+    - [CreateResponse](#omni.resources.CreateResponse)
+    - [UpdateRequest](#omni.resources.UpdateRequest)
+    - [UpdateResponse](#omni.resources.UpdateResponse)
+    - [DeleteRequest](#omni.resources.DeleteRequest)
+    - [DeleteResponse](#omni.resources.DeleteResponse)
+  
+    - [EventType](#omni.resources.EventType)
+  
+    - [ResourceService](#omni.resources.ResourceService)
+  
+- [specs/auth.proto](#specs/auth.proto)
+    - [AuthConfigSpec](#specs.AuthConfigSpec)
+    - [Auth0](#specs.AuthConfigSpec.Auth0)
+    - [OIDC](#specs.AuthConfigSpec.OIDC)
+    - [Webauthn](#specs.AuthConfigSpec.Webauthn)
+    - [SAML](#specs.AuthConfigSpec.SAML)
+    - [SAMLAssertionSpec](#specs.SAMLAssertionSpec)
+    - [UserSpec](#specs.UserSpec)
+    - [IdentitySpec](#specs.IdentitySpec)
+    - [Identity](#specs.Identity)
+    - [PublicKeySpec](#specs.PublicKeySpec)
+    - [AccessPolicyUserGroup](#specs.AccessPolicyUserGroup)
+    - [User](#specs.AccessPolicyUserGroup.User)
+    - [AccessPolicyClusterGroup](#specs.AccessPolicyClusterGroup)
+    - [Cluster](#specs.AccessPolicyClusterGroup.Cluster)
+    - [AccessPolicyRule](#specs.AccessPolicyRule)
+    - [Kubernetes](#specs.AccessPolicyRule.Kubernetes)
+    - [Impersonate](#specs.AccessPolicyRule.Kubernetes.Impersonate)
+    - [AccessPolicyTest](#specs.AccessPolicyTest)
+    - [Expected](#specs.AccessPolicyTest.Expected)
+    - [Kubernetes](#specs.AccessPolicyTest.Expected.Kubernetes)
+    - [Impersonate](#specs.AccessPolicyTest.Expected.Kubernetes.Impersonate)
+    - [User](#specs.AccessPolicyTest.User)
+    - [Cluster](#specs.AccessPolicyTest.Cluster)
+    - [AccessPolicySpec](#specs.AccessPolicySpec)
+    - [SAMLLabelRuleSpec](#specs.SAMLLabelRuleSpec)
+    - [IdentityLastActiveSpec](#specs.IdentityLastActiveSpec)
+    - [PublicKeyLastActiveSpec](#specs.PublicKeyLastActiveSpec)
+    - [IdentityStatusSpec](#specs.IdentityStatusSpec)
+    - [ServiceAccountStatusSpec](#specs.ServiceAccountStatusSpec)
+    - [PgpPublicKey](#specs.ServiceAccountStatusSpec.PgpPublicKey)
+    - [EulaAcceptanceSpec](#specs.EulaAcceptanceSpec)
+  
+    - [Type](#specs.PublicKeySpec.Type)
+  
+- [specs/ephemeral.proto](#specs/ephemeral.proto)
+    - [MachineStatusLinkSpec](#specs.MachineStatusLinkSpec)
+  
+- [specs/infra.proto](#specs/infra.proto)
+    - [MachineRequestSpec](#specs.MachineRequestSpec)
+    - [MachineRequestStatusSpec](#specs.MachineRequestStatusSpec)
+    - [InfraMachineSpec](#specs.InfraMachineSpec)
+    - [InfraMachineStateSpec](#specs.InfraMachineStateSpec)
+    - [InfraMachineStatusSpec](#specs.InfraMachineStatusSpec)
+  
+    - [Stage](#specs.MachineRequestStatusSpec.Stage)
+    - [MachinePowerState](#specs.InfraMachineSpec.MachinePowerState)
+    - [MachinePowerState](#specs.InfraMachineStatusSpec.MachinePowerState)
+  
+- [specs/oidc.proto](#specs/oidc.proto)
+    - [JWTPublicKeySpec](#specs.JWTPublicKeySpec)
+  
+- [specs/omni.proto](#specs/omni.proto)
+    - [MachineSpec](#specs.MachineSpec)
+    - [SecurityState](#specs.SecurityState)
+    - [Overlay](#specs.Overlay)
+    - [MetaValue](#specs.MetaValue)
+    - [MachineStatusSpec](#specs.MachineStatusSpec)
+    - [HardwareStatus](#specs.MachineStatusSpec.HardwareStatus)
+    - [Processor](#specs.MachineStatusSpec.HardwareStatus.Processor)
+    - [MemoryModule](#specs.MachineStatusSpec.HardwareStatus.MemoryModule)
+    - [BlockDevice](#specs.MachineStatusSpec.HardwareStatus.BlockDevice)
+    - [NetworkStatus](#specs.MachineStatusSpec.NetworkStatus)
+    - [NetworkLinkStatus](#specs.MachineStatusSpec.NetworkStatus.NetworkLinkStatus)
+    - [PlatformMetadata](#specs.MachineStatusSpec.PlatformMetadata)
+    - [Schematic](#specs.MachineStatusSpec.Schematic)
+    - [InitialState](#specs.MachineStatusSpec.Schematic.InitialState)
+    - [Diagnostic](#specs.MachineStatusSpec.Diagnostic)
+    - [TalosConfigSpec](#specs.TalosConfigSpec)
+    - [ClusterSpec](#specs.ClusterSpec)
+    - [Features](#specs.ClusterSpec.Features)
+  
+    - [Role](#specs.MachineStatusSpec.Role)
+    - [PowerState](#specs.MachineStatusSpec.PowerState)
+  
+- [specs/siderolink.proto](#specs/siderolink.proto)
+    - [SiderolinkConfigSpec](#specs.SiderolinkConfigSpec)
+    - [SiderolinkSpec](#specs.SiderolinkSpec)
+    - [LinkStatusSpec](#specs.LinkStatusSpec)
+    - [SiderolinkCounterSpec](#specs.SiderolinkCounterSpec)
+    - [ConnectionParamsSpec](#specs.ConnectionParamsSpec)
+    - [PendingMachineStatusSpec](#specs.PendingMachineStatusSpec)
+    - [JoinConfig](#specs.JoinConfig)
+    - [SiderolinkAPIConfigSpec](#specs.SiderolinkAPIConfigSpec)
+    - [ProviderJoinConfigSpec](#specs.ProviderJoinConfigSpec)
+    - [MachineJoinConfigSpec](#specs.MachineJoinConfigSpec)
+    - [NodeUniqueTokenSpec](#specs.NodeUniqueTokenSpec)
+    - [NodeUniqueTokenStatusSpec](#specs.NodeUniqueTokenStatusSpec)
+    - [JoinTokenSpec](#specs.JoinTokenSpec)
+    - [JoinTokenStatusSpec](#specs.JoinTokenStatusSpec)
+    - [Warning](#specs.JoinTokenStatusSpec.Warning)
+    - [JoinTokenUsageSpec](#specs.JoinTokenUsageSpec)
+    - [DefaultJoinTokenSpec](#specs.DefaultJoinTokenSpec)
+    - [GRPCTunnelConfigSpec](#specs.GRPCTunnelConfigSpec)
+  
+    - [State](#specs.NodeUniqueTokenStatusSpec.State)
+    - [State](#specs.JoinTokenStatusSpec.State)
+  
+- [specs/system.proto](#specs/system.proto)
+    - [DBVersionSpec](#specs.DBVersionSpec)
+    - [SysVersionSpec](#specs.SysVersionSpec)
+  
+- [specs/virtual.proto](#specs/virtual.proto)
+    - [CurrentUserSpec](#specs.CurrentUserSpec)
+    - [PermissionsSpec](#specs.PermissionsSpec)
+    - [ClusterPermissionsSpec](#specs.ClusterPermissionsSpec)
+    - [LabelsCompletionSpec](#specs.LabelsCompletionSpec)
+    - [Values](#specs.LabelsCompletionSpec.Values)
+    - [AdvertisedEndpointsSpec](#specs.AdvertisedEndpointsSpec)
+    - [PlatformConfigSpec](#specs.PlatformConfigSpec)
+    - [SBCConfigSpec](#specs.SBCConfigSpec)
+    - [OfficeHoursConfig](#specs.OfficeHoursConfig)
+    - [SupportSpec](#specs.SupportSpec)
+    - [QuirksSpec](#specs.QuirksSpec)
+  
+    - [BootMethod](#specs.PlatformConfigSpec.BootMethod)
+    - [Arch](#specs.PlatformConfigSpec.Arch)
+  
+- [Scalar Value Types](#scalar-value-types)
+
+<a name="management/management.proto"></a>
+<p align="right"><a href="#top">Top</a></p>
+
+## management/management.proto
+
+<a name="management.KubeconfigResponse"></a>
+
+### KubeconfigResponse
+
+| Field | Type | Label | Description |
+| ----- | ---- | ----- | ----------- |
+| kubeconfig | [bytes](#bytes) |  | Kubeconfig is the kubeconfig for the cluster. |
+
+<a name="management.TalosconfigResponse"></a>
+
+### TalosconfigResponse
+
+| Field | Type | Label | Description |
+| ----- | ---- | ----- | ----------- |
+| talosconfig | [bytes](#bytes) |  | talosconfig is the talos client configuration to access the cluster via the proxy. |
+
+<a name="management.OmniconfigResponse"></a>
+
+### OmniconfigResponse
+
+| Field | Type | Label | Description |
+| ----- | ---- | ----- | ----------- |
+| omniconfig | [bytes](#bytes) |  | omniconfig is the omnictl client configuration to access the omni instance. |
+
+<a name="management.MachineLogsRequest"></a>
+
+### MachineLogsRequest
+
+| Field | Type | Label | Description |
+| ----- | ---- | ----- | ----------- |
+| machine_id | [string](#string) |  | MachineId is the ID of the machine. |
+| follow | [bool](#bool) |  | Follow is whether to follow the logs. |
+| tail_lines | [int32](#int32) |  | TailLines is the number of lines to tail. |
+
+<a name="management.ValidateConfigRequest"></a>
+
+### ValidateConfigRequest
+
+| Field | Type | Label | Description |
+| ----- | ---- | ----- | ----------- |
+| config | [string](#string) |  | Config represents raw configuration string to validate. |
+
+<a name="management.TalosconfigRequest"></a>
+
+### TalosconfigRequest
+
+| Field | Type | Label | Description |
+| ----- | ---- | ----- | ----------- |
+| raw | [bool](#bool) |  | Raw indicates whether to generate an raw talosconfig or a regular one. |
+| break_glass | [bool](#bool) |  | BreakGlass indicates whether to generate an operator break glass talosconfig or a regular one. |
+
+<a name="management.CreateServiceAccountRequest"></a>
+
+### CreateServiceAccountRequest
+
+| Field | Type | Label | Description |
+| ----- | ---- | ----- | ----------- |
+| armored_pgp_public_key | [string](#string) |  |  |
+| use_user_role | [bool](#bool) |  | UseUserRole indicates whether to use the role of the creating user. When true, role will be ignored and the service account will be created with the role of the creating user. |
+| role | [string](#string) |  |  |
+| name | [string](#string) |  |  |
+
+<a name="management.CreateServiceAccountResponse"></a>
+
+### CreateServiceAccountResponse
+
+| Field | Type | Label | Description |
+| ----- | ---- | ----- | ----------- |
+| public_key_id | [string](#string) |  |  |
+
+<a name="management.RenewServiceAccountRequest"></a>
+
+### RenewServiceAccountRequest
+
+| Field | Type | Label | Description |
+| ----- | ---- | ----- | ----------- |
+| name | [string](#string) |  |  |
+| armored_pgp_public_key | [string](#string) |  |  |
+
+<a name="management.RenewServiceAccountResponse"></a>
+
+### RenewServiceAccountResponse
+
+| Field | Type | Label | Description |
+| ----- | ---- | ----- | ----------- |
+| public_key_id | [string](#string) |  |  |
+
+<a name="management.DestroyServiceAccountRequest"></a>
+
+### DestroyServiceAccountRequest
+
+| Field | Type | Label | Description |
+| ----- | ---- | ----- | ----------- |
+| name | [string](#string) |  |  |
+
+<a name="management.ListServiceAccountsResponse"></a>
+
+### ListServiceAccountsResponse
+
+| Field | Type | Label | Description |
+| ----- | ---- | ----- | ----------- |
+| service_accounts | [ServiceAccount](#management.ServiceAccount) | repeated |  |
+
+<a name="management.ListServiceAccountsResponse.ServiceAccount"></a>
+
+### ServiceAccount
+
+| Field | Type | Label | Description |
+| ----- | ---- | ----- | ----------- |
+| name | [string](#string) |  |  |
+| pgp_public_keys | [PgpPublicKey](#management.PgpPublicKey) | repeated |  |
+| role | [string](#string) |  |  |
+| last_active | [string](#string) |  |  |
+
+<a name="management.ListServiceAccountsResponse.ServiceAccount.PgpPublicKey"></a>
+
+### PgpPublicKey
+
+| Field | Type | Label | Description |
+| ----- | ---- | ----- | ----------- |
+| id | [string](#string) |  |  |
+| armored | [string](#string) |  |  |
+| expiration | [google.protobuf.Timestamp](#google.protobuf.Timestamp) |  |  |
+| created | [google.protobuf.Timestamp](#google.protobuf.Timestamp) |  |  |
+| last_used | [google.protobuf.Timestamp](#google.protobuf.Timestamp) |  |  |
+
+<a name="management.KubeconfigRequest"></a>
+
+### KubeconfigRequest
+
+| Field | Type | Label | Description |
+| ----- | ---- | ----- | ----------- |
+| service_account | [bool](#bool) |  |  |
+| service_account_ttl | [google.protobuf.Duration](#google.protobuf.Duration) |  |  |
+| service_account_user | [string](#string) |  |  |
+| service_account_groups | [string](#string) | repeated |  |
+| grant_type | [string](#string) |  |  |
+| break_glass | [bool](#bool) |  |  |
+| oidc_cache_base_dir | [string](#string) |  |  |
+| oidc_cache_isolation | [bool](#bool) |  |  |
+
+<a name="management.KubernetesUpgradePreChecksRequest"></a>
+
+### KubernetesUpgradePreChecksRequest
+
+| Field | Type | Label | Description |
+| ----- | ---- | ----- | ----------- |
+| new_version | [string](#string) |  |  |
+
+<a name="management.KubernetesUpgradePreChecksResponse"></a>
+
+### KubernetesUpgradePreChecksResponse
+
+| Field | Type | Label | Description |
+| ----- | ---- | ----- | ----------- |
+| ok | [bool](#bool) |  |  |
+| reason | [string](#string) |  |  |
+
+<a name="management.KubernetesSSAOptions"></a>
+
+### KubernetesSSAOptions
+
+| Field | Type | Label | Description |
+| ----- | ---- | ----- | ----------- |
+| inventory_policy | [InventoryPolicy](#management.InventoryPolicy) |  |  |
+| reconcile_timeout | [google.protobuf.Duration](#google.protobuf.Duration) |  |  |
+| force_conflicts | [bool](#bool) |  |  |
+| no_prune | [bool](#bool) |  |  |
+
+<a name="management.KubernetesSSAOptions.InventoryPolicy"></a>
+
+### InventoryPolicy
+
+| Name | Number | Description |
+| ---- | ------ | ----------- |
+| MUST_MATCH | 0 |  |
+| ADOPT_IF_NO_INVENTORY | 1 |  |
+| ADOPT_ALL | 2 |  |
+
+<a name="management.KubernetesSyncManifestRequest"></a>
+
+### KubernetesSyncManifestRequest
+
+| Field | Type | Label | Description |
+| ----- | ---- | ----- | ----------- |
+| dry_run | [bool](#bool) |  |  |
+| ssa | [KubernetesSSAOptions](#management.KubernetesSSAOptions) |  |  |
+
+<a name="management.KubernetesSyncManifestResponse"></a>
+
+### KubernetesSyncManifestResponse
+
+| Field | Type | Label | Description |
+| ----- | ---- | ----- | ----------- |
+| response_type | [ResponseType](#management.ResponseType) |  |  |
+| path | [string](#string) |  |  |
+| object | [bytes](#bytes) |  |  |
+| diff | [string](#string) |  |  |
+| skipped | [bool](#bool) |  |  |
+
+<a name="management.KubernetesSyncManifestResponse.ResponseType"></a>
+
+### ResponseType
+
+| Name | Number | Description |
+| ---- | ------ | ----------- |
+| UNKNOWN | 0 |  |
+| MANIFEST | 1 |  |
+| ROLLOUT | 2 |  |
+
+<a name="management.CreateSchematicRequest"></a>
+
+### CreateSchematicRequest
+
+| Field | Type | Label | Description |
+| ----- | ---- | ----- | ----------- |
+| extensions | [string](#string) | repeated |  |
+| extra_kernel_args | [string](#string) | repeated |  |
+| meta_values | [uint32](#uint32), [string](#string) |  |  |
+| talos_version | [string](#string) |  |  |
+| media_id | [string](#string) |  |  |
+| secure_boot | [bool](#bool) |  |  |
+| siderolink_grpc_tunnel_mode | [SiderolinkGRPCTunnelMode](#management.SiderolinkGRPCTunnelMode) |  |  |
+| join_token | [string](#string) |  |  |
+| overlay | [Overlay](#management.Overlay) |  |  |
+| bootloader | [SchematicBootloader](#management.SchematicBootloader) |  |  |
+
+<a name="management.CreateSchematicRequest.SiderolinkGRPCTunnelMode"></a>
+
+### SiderolinkGRPCTunnelMode
+
+| Name | Number | Description |
+| ---- | ------ | ----------- |
+| AUTO | 0 |  |
+| DISABLED | 1 |  |
+| ENABLED | 2 |  |
+
+<a name="management.CreateSchematicRequest.Overlay"></a>
+
+### Overlay
+
+| Field | Type | Label | Description |
+| ----- | ---- | ----- | ----------- |
+| image | [string](#string) |  |  |
+| name | [string](#string) |  |  |
+| options | [string](#string) |  |  |
+
+<a name="management.CreateSchematicResponse"></a>
+
+### CreateSchematicResponse
+
+| Field | Type | Label | Description |
+| ----- | ---- | ----- | ----------- |
+| schematic_id | [string](#string) |  |  |
+| pxe_url | [string](#string) |  |  |
+| grpc_tunnel_enabled | [bool](#bool) |  |  |
+| schematic_yml | [string](#string) |  |  |
+
+<a name="management.GetSupportBundleRequest"></a>
+
+### GetSupportBundleRequest
+
+| Field | Type | Label | Description |
+| ----- | ---- | ----- | ----------- |
+| cluster | [string](#string) |  |  |
+
+<a name="management.GetSupportBundleResponse"></a>
+
+### GetSupportBundleResponse
+
+| Field | Type | Label | Description |
+| ----- | ---- | ----- | ----------- |
+| progress | [Progress](#management.Progress) |  |  |
+| bundle_data | [bytes](#bytes) |  |  |
+
+<a name="management.GetSupportBundleResponse.Progress"></a>
+
+### Progress
+
+| Field | Type | Label | Description |
+| ----- | ---- | ----- | ----------- |
+| source | [string](#string) |  |  |
+| error | [string](#string) |  |  |
+| state | [string](#string) |  |  |
+| total | [int32](#int32) |  |  |
+| value | [int32](#int32) |  |  |
+
+<a name="management.ReadAuditLogRequest"></a>
+
+### ReadAuditLogRequest
+specifies start and end time (inclusive range) in `<year>-<month>-<day>` format. We pass time as string to avoid timezone issues.
+
+| Field | Type | Label | Description |
+| ----- | ---- | ----- | ----------- |
+| start_time | [string](#string) |  |  |
+| end_time | [string](#string) |  |  |
+| order_by_field | [AuditLogOrderByField](#management.AuditLogOrderByField) |  |  |
+| order_by_dir | [AuditLogOrderByDir](#management.AuditLogOrderByDir) |  |  |
+| search | [string](#string) |  |  |
+| event_type | [AuditLogEventType](#management.AuditLogEventType) |  |  |
+| resource_type | [string](#string) |  |  |
+| resource_id | [string](#string) |  |  |
+| cluster_id | [string](#string) |  |  |
+| actor | [string](#string) |  |  |
+
+<a name="management.ReadAuditLogResponse"></a>
+
+### ReadAuditLogResponse
+
+| Field | Type | Label | Description |
+| ----- | ---- | ----- | ----------- |
+| audit_log | [bytes](#bytes) |  |  |
+
+<a name="management.ValidateJsonSchemaRequest"></a>
+
+### ValidateJsonSchemaRequest
+
+| Field | Type | Label | Description |
+| ----- | ---- | ----- | ----------- |
+| data | [string](#string) |  |  |
+| schema | [string](#string) |  |  |
+
+<a name="management.ValidateJsonSchemaResponse"></a>
+
+### ValidateJsonSchemaResponse
+
+| Field | Type | Label | Description |
+| ----- | ---- | ----- | ----------- |
+| errors | [Error](#management.Error) | repeated |  |
+
+<a name="management.ValidateJsonSchemaResponse.Error"></a>
+
+### Error
+
+| Field | Type | Label | Description |
+| ----- | ---- | ----- | ----------- |
+| errors | [Error](#management.Error) | repeated |  |
+| schema_path | [string](#string) |  |  |
+| data_path | [string](#string) |  |  |
+| cause | [string](#string) |  |  |
+
+<a name="management.MaintenanceUpgradeRequest"></a>
+
+### MaintenanceUpgradeRequest
+
+| Field | Type | Label | Description |
+| ----- | ---- | ----- | ----------- |
+| machine_id | [string](#string) |  |  |
+| version | [string](#string) |  |  |
+
+<a name="management.MaintenanceUpgradeResponse"></a>
+
+### MaintenanceUpgradeResponse
+
+
+<a name="management.GetMachineJoinConfigRequest"></a>
+
+### GetMachineJoinConfigRequest
+
+| Field | Type | Label | Description |
+| ----- | ---- | ----- | ----------- |
+| use_grpc_tunnel | [bool](#bool) |  |  |
+| join_token | [string](#string) |  |  |
+
+<a name="management.GetMachineJoinConfigResponse"></a>
+
+### GetMachineJoinConfigResponse
+
+| Field | Type | Label | Description |
+| ----- | ---- | ----- | ----------- |
+| kernel_args | [string](#string) | repeated |  |
+| config | [string](#string) |  |  |
+
+<a name="management.GenJoinTokenResponse"></a>
+
+### GenJoinTokenResponse
+
+| Field | Type | Label | Description |
+| ----- | ---- | ----- | ----------- |
+| token | [string](#string) |  |  |
+
+<a name="management.CreateJoinTokenRequest"></a>
+
+### CreateJoinTokenRequest
+
+| Field | Type | Label | Description |
+| ----- | ---- | ----- | ----------- |
+| name | [string](#string) |  |  |
+| expiration_time | [google.protobuf.Timestamp](#google.protobuf.Timestamp) |  |  |
+
+<a name="management.CreateJoinTokenResponse"></a>
+
+### CreateJoinTokenResponse
+
+| Field | Type | Label | Description |
+| ----- | ---- | ----- | ----------- |
+| id | [string](#string) |  |  |
+
+<a name="management.ResetNodeUniqueTokenRequest"></a>
+
+### ResetNodeUniqueTokenRequest
+
+| Field | Type | Label | Description |
+| ----- | ---- | ----- | ----------- |
+| id | [string](#string) |  |  |
+
+<a name="management.SchematicBootloader"></a>
+
+### SchematicBootloader
+
+| Name | Number | Description |
+| ---- | ------ | ----------- |
+| BOOT_AUTO | 0 |  |
+| BOOT_DUAL | 1 |  |
+| BOOT_SD | 2 |  |
+| BOOT_GRUB | 3 |  |
+
+<a name="management.AuditLogEventType"></a>
+
+### AuditLogEventType
+
+| Name | Number | Description |
+| ---- | ------ | ----------- |
+| AUDIT_LOG_EVENT_TYPE_UNSPECIFIED | 0 |  |
+| AUDIT_LOG_EVENT_TYPE_CREATE | 1 |  |
+| AUDIT_LOG_EVENT_TYPE_UPDATE | 2 |  |
+| AUDIT_LOG_EVENT_TYPE_UPDATE_WITH_CONFLICTS | 3 |  |
+| AUDIT_LOG_EVENT_TYPE_DESTROY | 4 |  |
+| AUDIT_LOG_EVENT_TYPE_TEARDOWN | 5 |  |
+| AUDIT_LOG_EVENT_TYPE_TALOS_ACCESS | 6 |  |
+| AUDIT_LOG_EVENT_TYPE_K8S_ACCESS | 7 |  |
+
+<a name="management.AuditLogOrderByField"></a>
+
+### AuditLogOrderByField
+
+| Name | Number | Description |
+| ---- | ------ | ----------- |
+| AUDIT_LOG_ORDER_BY_FIELD_UNSPECIFIED | 0 |  |
+| AUDIT_LOG_ORDER_BY_FIELD_DATE | 1 |  |
+| AUDIT_LOG_ORDER_BY_FIELD_EVENT_TYPE | 2 |  |
+| AUDIT_LOG_ORDER_BY_FIELD_RESOURCE_TYPE | 3 |  |
+| AUDIT_LOG_ORDER_BY_FIELD_RESOURCE_ID | 4 |  |
+| AUDIT_LOG_ORDER_BY_FIELD_CLUSTER_ID | 5 |  |
+| AUDIT_LOG_ORDER_BY_FIELD_ACTOR | 6 |  |
+
+<a name="management.AuditLogOrderByDir"></a>
+
+### AuditLogOrderByDir
+
+| Name | Number | Description |
+| ---- | ------ | ----------- |
+| AUDIT_LOG_ORDER_BY_DIR_UNSPECIFIED | 0 |  |
+| AUDIT_LOG_ORDER_BY_DIR_ASC | 1 |  |
+| AUDIT_LOG_ORDER_BY_DIR_DESC | 2 |  |
+
+<a name="management.ManagementService"></a>
+
+### ManagementService
+
+| Method Name | Request Type | Response Type | Description |
+| ----------- | ------------ | ------------- | ------------|
+| Kubeconfig | [KubeconfigRequest](#management.KubeconfigRequest) | [KubeconfigResponse](#management.KubeconfigResponse) |  |
+| Talosconfig | [TalosconfigRequest](#management.TalosconfigRequest) | [TalosconfigResponse](#management.TalosconfigResponse) |  |
+| Omniconfig | [google.protobuf.Empty](#google.protobuf.Empty) | [OmniconfigResponse](#management.OmniconfigResponse) |  |
+| MachineLogs | [MachineLogsRequest](#management.MachineLogsRequest) | stream [common.Data](#common.Data) |  |
+| ValidateConfig | [ValidateConfigRequest](#management.ValidateConfigRequest) | [google.protobuf.Empty](#google.protobuf.Empty) |  |
+| ValidateJSONSchema | [ValidateJsonSchemaRequest](#management.ValidateJsonSchemaRequest) | [ValidateJsonSchemaResponse](#management.ValidateJsonSchemaResponse) |  |
+| CreateServiceAccount | [CreateServiceAccountRequest](#management.CreateServiceAccountRequest) | [CreateServiceAccountResponse](#management.CreateServiceAccountResponse) |  |
+| RenewServiceAccount | [RenewServiceAccountRequest](#management.RenewServiceAccountRequest) | [RenewServiceAccountResponse](#management.RenewServiceAccountResponse) |  |
+| ListServiceAccounts | [google.protobuf.Empty](#google.protobuf.Empty) | [ListServiceAccountsResponse](#management.ListServiceAccountsResponse) |  |
+| DestroyServiceAccount | [DestroyServiceAccountRequest](#management.DestroyServiceAccountRequest) | [google.protobuf.Empty](#google.protobuf.Empty) |  |
+| KubernetesUpgradePreChecks | [KubernetesUpgradePreChecksRequest](#management.KubernetesUpgradePreChecksRequest) | [KubernetesUpgradePreChecksResponse](#management.KubernetesUpgradePreChecksResponse) |  |
+| KubernetesSyncManifests | [KubernetesSyncManifestRequest](#management.KubernetesSyncManifestRequest) | stream [KubernetesSyncManifestResponse](#management.KubernetesSyncManifestResponse) |  |
+| CreateSchematic | [CreateSchematicRequest](#management.CreateSchematicRequest) | [CreateSchematicResponse](#management.CreateSchematicResponse) |  |
+| GetSupportBundle | [GetSupportBundleRequest](#management.GetSupportBundleRequest) | stream [GetSupportBundleResponse](#management.GetSupportBundleResponse) |  |
+| ReadAuditLog | [ReadAuditLogRequest](#management.ReadAuditLogRequest) | stream [ReadAuditLogResponse](#management.ReadAuditLogResponse) |  |
+| MaintenanceUpgrade | [MaintenanceUpgradeRequest](#management.MaintenanceUpgradeRequest) | [MaintenanceUpgradeResponse](#management.MaintenanceUpgradeResponse) |  |
+| GetMachineJoinConfig | [GetMachineJoinConfigRequest](#management.GetMachineJoinConfigRequest) | [GetMachineJoinConfigResponse](#management.GetMachineJoinConfigResponse) |  |
+| CreateJoinToken | [CreateJoinTokenRequest](#management.CreateJoinTokenRequest) | [CreateJoinTokenResponse](#management.CreateJoinTokenResponse) |  |
+| ResetNodeUniqueToken | [ResetNodeUniqueTokenRequest](#management.ResetNodeUniqueTokenRequest) | [ResetNodeUniqueTokenResponse](#management.ResetNodeUniqueTokenResponse) |  |
+| CreateUser | [CreateUserRequest](#management.CreateUserRequest) | [CreateUserResponse](#management.CreateUserResponse) |  |
+| ListUsers | [google.protobuf.Empty](#google.protobuf.Empty) | [ListUsersResponse](#management.ListUsersResponse) |  |
+| UpdateUser | [UpdateUserRequest](#management.UpdateUserRequest) | [google.protobuf.Empty](#google.protobuf.Empty) |  |
+| DestroyUser | [DestroyUserRequest](#management.DestroyUserRequest) | [google.protobuf.Empty](#google.protobuf.Empty) |  |
+| MachinePowerOff | [MachinePowerOffRequest](#management.MachinePowerOffRequest) | [MachinePowerOffResponse](#management.MachinePowerOffResponse) |  |
+| MachinePowerOn | [MachinePowerOnRequest](#management.MachinePowerOnRequest) | [MachinePowerOnResponse](#management.MachinePowerOnResponse) |  |
+
+ 
+
+<a name="oidc/oidc.proto"></a>
+<p align="right"><a href="#top">Top</a></p>
+
+## oidc/oidc.proto
+
+<a name="oidc.AuthenticateRequest"></a>
+
+### AuthenticateRequest
+
+| Field | Type | Label | Description |
+| ----- | ---- | ----- | ----------- |
+| auth_request_id | [string](#string) |  | Auth Request ID. |
+
+<a name="oidc.AuthenticateResponse"></a>
+
+### AuthenticateResponse
+
+| Field | Type | Label | Description |
+| ----- | ---- | ----- | ----------- |
+| redirect_url | [string](#string) |  | URL to redirect the user to. |
+| auth_code | [string](#string) |  | AuthCode to use with the keyboard login. |
+
+<a name="oidc.OIDCService"></a>
+
+### OIDCService
+
+| Method Name | Request Type | Response Type | Description |
+| ----------- | ------------ | ------------- | ------------|
+| Authenticate | [AuthenticateRequest](#oidc.AuthenticateRequest) | [AuthenticateResponse](#oidc.AuthenticateResponse) | Authenticate an OIDC auth request by ID. |
+
+ 
+
+<a name="resources/resources.proto"></a>
+<p align="right"><a href="#top">Top</a></p>
+
+## resources/resources.proto
+
+<a name="omni.resources.Resource"></a>
+
+### Resource
+
+| Field | Type | Label | Description |
+| ----- | ---- | ----- | ----------- |
+| metadata | [cosi.resource.Metadata](#cosi.resource.Metadata) |  |  |
+| spec | [string](#string) |  |  |
+
+<a name="omni.resources.GetRequest"></a>
+
+### GetRequest
+
+| Field | Type | Label | Description |
+| ----- | ---- | ----- | ----------- |
+| namespace | [string](#string) |  |  |
+| type | [string](#string) |  |  |
+| id | [string](#string) |  |  |
+
+<a name="omni.resources.GetResponse"></a>
+
+### GetResponse
+
+| Field | Type | Label | Description |
+| ----- | ---- | ----- | ----------- |
+| body | [string](#string) |  | Body should contain JSON encoded spec. |
+
+<a name="omni.resources.ListRequest"></a>
+
+### ListRequest
+
+| Field | Type | Label | Description |
+| ----- | ---- | ----- | ----------- |
+| namespace | [string](#string) |  |  |
+| type | [string](#string) |  |  |
+| offset | [int32](#int32) |  |  |
+| limit | [int32](#int32) |  |  |
+| sort_by_field | [string](#string) |  |  |
+| sort_descending | [bool](#bool) |  |  |
+| search_for | [string](#string) | repeated |  |
+
+<a name="omni.resources.ListResponse"></a>
+
+### ListResponse
+
+| Field | Type | Label | Description |
+| ----- | ---- | ----- | ----------- |
+| items | [string](#string) | repeated | Items should contain JSON encoded resources. |
+| total | [int32](#int32) |  |  |
+
+<a name="omni.resources.Event"></a>
+
+### Event
+Event is emitted when resource changes. It's the same as COSI Event, but encodes resources into JSON.
+
+| Field | Type | Label | Description |
+| ----- | ---- | ----- | ----------- |
+| resource | [string](#string) |  |  |
+| old | [string](#string) |  |  |
+| event_type | [EventType](#omni.resources.EventType) |  |  |
+
+<a name="omni.resources.WatchRequest"></a>
+
+### WatchRequest
+
+| Field | Type | Label | Description |
+| ----- | ---- | ----- | ----------- |
+| namespace | [string](#string) |  |  |
+| type | [string](#string) |  |  |
+| id | [string](#string) |  |  |
+| tail_events | [int32](#int32) |  |  |
+| offset | [int32](#int32) |  |  |
+| limit | [int32](#int32) |  |  |
+| sort_by_field | [string](#string) |  |  |
+| sort_descending | [bool](#bool) |  |  |
+| search_for | [string](#string) | repeated |  |
+
+<a name="omni.resources.WatchResponse"></a>
+
+### WatchResponse
+
+| Field | Type | Label | Description |
+| ----- | ---- | ----- | ----------- |
+| event | [Event](#omni.resources.Event) |  |  |
+| total | [int32](#int32) |  |  |
+| sort_field_data | [string](#string) |  |  |
+| sort_descending | [bool](#bool) |  |  |
+
+<a name="omni.resources.CreateRequest"></a>
+
+### CreateRequest
+
+| Field | Type | Label | Description |
+| ----- | ---- | ----- | ----------- |
+| resource | [Resource](#omni.resources.Resource) |  |  |
+
+<a name="omni.resources.CreateResponse"></a>
+
+### CreateResponse
+
+
+<a name="omni.resources.UpdateRequest"></a>
+
+### UpdateRequest
+
+| Field | Type | Label | Description |
+| ----- | ---- | ----- | ----------- |
+| currentVersion | [string](#string) |  |  |
+| resource | [Resource](#omni.resources.Resource) |  |  |
+
+<a name="omni.resources.UpdateResponse"></a>
+
+### UpdateResponse
+
+
+<a name="omni.resources.DeleteRequest"></a>
+
+### DeleteRequest
+
+| Field | Type | Label | Description |
+| ----- | ---- | ----- | ----------- |
+| namespace | [string](#string) |  |  |
+| type | [string](#string) |  |  |
+| id | [string](#string) |  |  |
+
+<a name="omni.resources.DeleteResponse"></a>
+
+### DeleteResponse
+
+
+<a name="omni.resources.EventType"></a>
+
+### EventType
+
+| Name | Number | Description |
+| ---- | ------ | ----------- |
+| UNKNOWN | 0 |  |
+| CREATED | 1 |  |
+| UPDATED | 2 |  |
+| DESTROYED | 3 |  |
+| BOOTSTRAPPED | 4 |  |
+
+<a name="omni.resources.ResourceService"></a>
+
+### ResourceService
+
+| Method Name | Request Type | Response Type | Description |
+| ----------- | ------------ | ------------- | ------------|
+| Get | [GetRequest](#omni.resources.GetRequest) | [GetResponse](#omni.resources.GetResponse) |  |
+| List | [ListRequest](#omni.resources.ListRequest) | [ListResponse](#omni.resources.ListResponse) |  |
+| Create | [CreateRequest](#omni.resources.CreateRequest) | [CreateResponse](#omni.resources.CreateResponse) |  |
+| Update | [UpdateRequest](#omni.resources.UpdateRequest) | [UpdateResponse](#omni.resources.UpdateResponse) |  |
+| Delete | [DeleteRequest](#omni.resources.DeleteRequest) | [DeleteResponse](#omni.resources.DeleteResponse) |  |
+| Teardown | [DeleteRequest](#omni.resources.DeleteRequest) | [DeleteResponse](#omni.resources.DeleteResponse) |  |
+| Watch | [WatchRequest](#omni.resources.WatchRequest) | stream [WatchResponse](#omni.resources.WatchResponse) |  |
+| Controllers | [ControllersRequest](#omni.resources.ControllersRequest) | [ControllersResponse](#omni.resources.ControllersResponse) |  |
+| DependencyGraph | [DependencyGraphRequest](#omni.resources.DependencyGraphRequest) | [DependencyGraphResponse](#omni.resources.DependencyGraphResponse) |  |
+
+ 
+
+<a name="specs/auth.proto"></a>
+<p align="right"><a href="#top">Top</a></p>
+
+## specs/auth.proto
+
+<a name="specs.AuthConfigSpec"></a>
+
+### AuthConfigSpec
+AuthConfigSpec describes the authentication configuration.
+
+| Field | Type | Label | Description |
+| ----- | ---- | ----- | ----------- |
+| auth0 | [Auth0](#specs.Auth0) |  |  |
+| webauthn | [Webauthn](#specs.Webauthn) |  |  |
+| suspended | [bool](#bool) |  |  |
+| saml | [SAML](#specs.SAML) |  |  |
+| oidc | [OIDC](#specs.OIDC) |  |  |
+
+<a name="specs.AuthConfigSpec.Auth0"></a>
+
+### Auth0
+
+| Field | Type | Label | Description |
+| ----- | ---- | ----- | ----------- |
+| enabled | [bool](#bool) |  |  |
+| domain | [string](#string) |  |  |
+| client_id | [string](#string) |  |  |
+| useFormData | [bool](#bool) |  |  |
+
+<a name="specs.AuthConfigSpec.OIDC"></a>
+
+### OIDC
+
+| Field | Type | Label | Description |
+| ----- | ---- | ----- | ----------- |
+| enabled | [bool](#bool) |  |  |
+| provider_url | [string](#string) |  |  |
+| client_id | [string](#string) |  |  |
+| client_secret | [string](#string) |  |  |
+| scopes | [string](#string) | repeated |  |
+
+<a name="specs.AuthConfigSpec.Webauthn"></a>
+
+### Webauthn
+
+| Field | Type | Label | Description |
+| ----- | ---- | ----- | ----------- |
+| enabled | [bool](#bool) |  |  |
+| required | [bool](#bool) |  |  |
+
+<a name="specs.AuthConfigSpec.SAML"></a>
+
+### SAML
+
+| Field | Type | Label | Description |
+| ----- | ---- | ----- | ----------- |
+| enabled | [bool](#bool) |  |  |
+| url | [string](#string) |  |  |
+| metadata | [string](#string) |  |  |
+| label_rules | [string](#string), [string](#string) |  | LabelRules defines custom rules on how to extract SAML attributes from the saml assertion and turn them into labels. |
+| name_id_format | [string](#string) |  |  |
+| attribute_rules | [string](#string), [string](#string) |  | AttributeRules defines custom rules on how to extract the identity, fullname, firstname and lastname from the SAML assertion. |
+
+<a name="specs.SAMLAssertionSpec"></a>
+
+### SAMLAssertionSpec
+SAMLAssertionSpec describes SAML assertion.
+
+| Field | Type | Label | Description |
+| ----- | ---- | ----- | ----------- |
+| data | [bytes](#bytes) |  | Data keeps JSON encoded SAML assertion. |
+| email | [string](#string) |  | Email is the identity that was read from the assertion. |
+| used | [bool](#bool) |  | Used marks SAML assertion as used. |
+
+<a name="specs.UserSpec"></a>
+
+### UserSpec
+UserSpec describes a user.
+
+| Field | Type | Label | Description |
+| ----- | ---- | ----- | ----------- |
+| scopes | [string](#string) | repeated | Scopes are deprecated, use roles instead.  Deprecated: will be removed once all environments are migrated to use roles. TODO: remove after all environments are migrated to use roles. |
+| role | [string](#string) |  |  |
+
+<a name="specs.IdentitySpec"></a>
+
+### IdentitySpec
+IdentitySpec describes a user identity.
+
+| Field | Type | Label | Description |
+| ----- | ---- | ----- | ----------- |
+| user_id | [string](#string) |  |  |
+
+<a name="specs.Identity"></a>
+
+### Identity
+
+| Field | Type | Label | Description |
+| ----- | ---- | ----- | ----------- |
+| email | [string](#string) |  |  |
+
+<a name="specs.PublicKeySpec"></a>
+
+### PublicKeySpec
+PublicKeySpec describes a user or service account public key.
+
+| Field | Type | Label | Description |
+| ----- | ---- | ----- | ----------- |
+| public_key | [bytes](#bytes) |  |  |
+| scopes | [string](#string) | repeated | Scopes are deprecated, use roles instead.  Deprecated: will be removed once all environments are migrated to use roles. TODO: remove after all environments are migrated to use roles. |
+| expiration | [google.protobuf.Timestamp](#google.protobuf.Timestamp) |  |  |
+| confirmed | [bool](#bool) |  |  |
+| identity | [Identity](#specs.Identity) |  |  |
+| role | [string](#string) |  |  |
+| type | [Type](#specs.Type) |  |  |
+
+<a name="specs.PublicKeySpec.Type"></a>
+
+### Type
+
+| Name | Number | Description |
+| ---- | ------ | ----------- |
+| UNKNOWN | 0 |  |
+| PGP | 1 |  |
+| PLAIN | 2 |  |
+
+<a name="specs.AccessPolicyUserGroup"></a>
+
+### AccessPolicyUserGroup
+AccessPolicyUserGroup describes a user group in the ACLs context.
+
+| Field | Type | Label | Description |
+| ----- | ---- | ----- | ----------- |
+| users | [User](#specs.User) | repeated |  |
+
+<a name="specs.AccessPolicyUserGroup.User"></a>
+
+### User
+
+| Field | Type | Label | Description |
+| ----- | ---- | ----- | ----------- |
+| name | [string](#string) |  |  |
+| match | [string](#string) |  |  |
+| label_selectors | [string](#string) | repeated |  |
+
+<a name="specs.AccessPolicyClusterGroup"></a>
+
+### AccessPolicyClusterGroup
+AccessPolicyClusterGroup describes a cluster group in the ACLs context.
+
+| Field | Type | Label | Description |
+| ----- | ---- | ----- | ----------- |
+| clusters | [Cluster](#specs.Cluster) | repeated |  |
+
+<a name="specs.AccessPolicyClusterGroup.Cluster"></a>
+
+### Cluster
+
+| Field | Type | Label | Description |
+| ----- | ---- | ----- | ----------- |
+| name | [string](#string) |  |  |
+| match | [string](#string) |  |  |
+
+<a name="specs.AccessPolicyRule"></a>
+
+### AccessPolicyRule
+AccessPolicyRule describes a rule in the ACLs context.
+
+| Field | Type | Label | Description |
+| ----- | ---- | ----- | ----------- |
+| users | [string](#string) | repeated |  |
+| clusters | [string](#string) | repeated |  |
+| kubernetes | [Kubernetes](#specs.Kubernetes) |  |  |
+| role | [string](#string) |  |  |
+
+<a name="specs.AccessPolicyRule.Kubernetes"></a>
+
+### Kubernetes
+
+| Field | Type | Label | Description |
+| ----- | ---- | ----- | ----------- |
+| impersonate | [Impersonate](#specs.Impersonate) |  |  |
+
+<a name="specs.AccessPolicyRule.Kubernetes.Impersonate"></a>
+
+### Impersonate
+
+| Field | Type | Label | Description |
+| ----- | ---- | ----- | ----------- |
+| groups | [string](#string) | repeated |  |
+
+<a name="specs.AccessPolicyTest"></a>
+
+### AccessPolicyTest
+
+| Field | Type | Label | Description |
+| ----- | ---- | ----- | ----------- |
+| name | [string](#string) |  |  |
+| user | [User](#specs.User) |  |  |
+| cluster | [Cluster](#specs.Cluster) |  |  |
+| expected | [Expected](#specs.Expected) |  |  |
+
+<a name="specs.AccessPolicyTest.Expected"></a>
+
+### Expected
+
+| Field | Type | Label | Description |
+| ----- | ---- | ----- | ----------- |
+| kubernetes | [Kubernetes](#specs.Kubernetes) |  |  |
+| role | [string](#string) |  |  |
+
+<a name="specs.AccessPolicyTest.Expected.Kubernetes"></a>
+
+### Kubernetes
+
+| Field | Type | Label | Description |
+| ----- | ---- | ----- | ----------- |
+| impersonate | [Impersonate](#specs.Impersonate) |  |  |
+
+<a name="specs.AccessPolicyTest.Expected.Kubernetes.Impersonate"></a>
+
+### Impersonate
+
+| Field | Type | Label | Description |
+| ----- | ---- | ----- | ----------- |
+| groups | [string](#string) | repeated |  |
+
+<a name="specs.AccessPolicyTest.User"></a>
+
+### User
+
+| Field | Type | Label | Description |
+| ----- | ---- | ----- | ----------- |
+| name | [string](#string) |  |  |
+| labels | [string](#string), [string](#string) |  |  |
+
+<a name="specs.AccessPolicyTest.Cluster"></a>
+
+### Cluster
+
+| Field | Type | Label | Description |
+| ----- | ---- | ----- | ----------- |
+| name | [string](#string) |  |  |
+
+<a name="specs.AccessPolicySpec"></a>
+
+### AccessPolicySpec
+AccessPolicySpec describes the access policy configuration.
+
+| Field | Type | Label | Description |
+| ----- | ---- | ----- | ----------- |
+| user_groups | [string](#string), [AccessPolicyUserGroup](#specs.AccessPolicyUserGroup) |  |  |
+| cluster_groups | [string](#string), [AccessPolicyClusterGroup](#specs.AccessPolicyClusterGroup) |  |  |
+| rules | [AccessPolicyRule](#specs.AccessPolicyRule) | repeated |  |
+| tests | [AccessPolicyTest](#specs.AccessPolicyTest) | repeated |  |
+
+<a name="specs.SAMLLabelRuleSpec"></a>
+
+### SAMLLabelRuleSpec
+SAMLLabelRuleSpec describes a rule on how to map Identity labels to Omni roles.
+
+| Field | Type | Label | Description |
+| ----- | ---- | ----- | ----------- |
+| match_labels | [string](#string) | repeated | MatchLabels is the list of labels to match the user's Identity against this rule. |
+| assign_role_on_registration | [string](#string) |  | AssignRoleOnRegistration is the role to be assigned to the user if this rule matches.  Deprecated: use AssignRole instead. |
+| assign_role | [string](#string) |  | AssignRole to the user matched by this rule. |
+| update_on_each_login | [bool](#bool) |  | UpdateOnEachLogin makes the rule to be applied every time user logs in. |
+
+<a name="specs.IdentityLastActiveSpec"></a>
+
+### IdentityLastActiveSpec
+IdentityLastActiveSpec tracks the last time a user or service account was active.
+
+| Field | Type | Label | Description |
+| ----- | ---- | ----- | ----------- |
+| last_active | [google.protobuf.Timestamp](#google.protobuf.Timestamp) |  |  |
+
+<a name="specs.PublicKeyLastActiveSpec"></a>
+
+### PublicKeyLastActiveSpec
+PublicKeyLastActiveSpec tracks the last time a specific public key was used to authenticate.
+
+| Field | Type | Label | Description |
+| ----- | ---- | ----- | ----------- |
+| last_used | [google.protobuf.Timestamp](#google.protobuf.Timestamp) |  |  |
+
+<a name="specs.IdentityStatusSpec"></a>
+
+### IdentityStatusSpec
+IdentityStatusSpec aggregates identity, user, and activity data into a single resource.
+
+| Field | Type | Label | Description |
+| ----- | ---- | ----- | ----------- |
+| user_id | [string](#string) |  |  |
+| role | [string](#string) |  |  |
+| last_active | [string](#string) |  |  |
+
+<a name="specs.ServiceAccountStatusSpec"></a>
+
+### ServiceAccountStatusSpec
+
+| Field | Type | Label | Description |
+| ----- | ---- | ----- | ----------- |
+| role | [string](#string) |  |  |
+| public_keys | [PgpPublicKey](#specs.PgpPublicKey) | repeated |  |
+| expiration | [google.protobuf.Timestamp](#google.protobuf.Timestamp) |  |  |
+
+<a name="specs.ServiceAccountStatusSpec.PgpPublicKey"></a>
+
+### PgpPublicKey
+
+| Field | Type | Label | Description |
+| ----- | ---- | ----- | ----------- |
+| id | [string](#string) |  |  |
+| armored | [string](#string) |  |  |
+| expiration | [google.protobuf.Timestamp](#google.protobuf.Timestamp) |  |  |
+| created | [google.protobuf.Timestamp](#google.protobuf.Timestamp) |  |  |
+| last_used | [google.protobuf.Timestamp](#google.protobuf.Timestamp) |  |  |
+
+<a name="specs.EulaAcceptanceSpec"></a>
+
+### EulaAcceptanceSpec
+EulaAcceptanceSpec records the instance-wide EULA acceptance.
+
+| Field | Type | Label | Description |
+| ----- | ---- | ----- | ----------- |
+| accepted_by_name | [string](#string) |  | AcceptedByName is the full name of the person who accepted the EULA. |
+| accepted_by_email | [string](#string) |  | AcceptedByEmail is the email address of the person who accepted the EULA. |
+
+ 
+
+<a name="specs/ephemeral.proto"></a>
+<p align="right"><a href="#top">Top</a></p>
+
+## specs/ephemeral.proto
+
+<a name="specs.MachineStatusLinkSpec"></a>
+
+### MachineStatusLinkSpec
+MachineStatusLinkSpec describes the combination of MessageStatusSpec and SideroLinkSpec and SiderolinkCounterSpec
+
+| Field | Type | Label | Description |
+| ----- | ---- | ----- | ----------- |
+| message_status | [specs.MachineStatusSpec](#specs.MachineStatusSpec) |  |  |
+| siderolink_counter | [specs.SiderolinkCounterSpec](#specs.SiderolinkCounterSpec) |  |  |
+| machine_created_at | [int64](#int64) |  |  |
+| tearing_down | [bool](#bool) |  |  |
+
+ 
+
+<a name="specs/infra.proto"></a>
+<p align="right"><a href="#top">Top</a></p>
+
+## specs/infra.proto
+
+<a name="specs.MachineRequestSpec"></a>
+
+### MachineRequestSpec
+
+| Field | Type | Label | Description |
+| ----- | ---- | ----- | ----------- |
+| talos_version | [string](#string) |  |  |
+| overlay | [specs.Overlay](#specs.Overlay) |  |  |
+| extensions | [string](#string) | repeated |  |
+| kernel_args | [string](#string) | repeated |  |
+| meta_values | [specs.MetaValue](#specs.MetaValue) | repeated |  |
+| provider_data | [string](#string) |  |  |
+| grpc_tunnel | [GrpcTunnelMode](#specs.GrpcTunnelMode) |  |  |
+
+<a name="specs.MachineRequestStatusSpec"></a>
+
+### MachineRequestStatusSpec
+
+| Field | Type | Label | Description |
+| ----- | ---- | ----- | ----------- |
+| id | [string](#string) |  |  |
+| stage | [Stage](#specs.Stage) |  |  |
+| error | [string](#string) |  |  |
+| status | [string](#string) |  |  |
+
+<a name="specs.MachineRequestStatusSpec.Stage"></a>
+
+### Stage
+
+| Name | Number | Description |
+| ---- | ------ | ----------- |
+| UNKNOWN | 0 |  |
+| PROVISIONING | 1 |  |
+| PROVISIONED | 2 |  |
+| FAILED | 3 |  |
+
+<a name="specs.InfraMachineSpec"></a>
+
+### InfraMachineSpec
+
+| Field | Type | Label | Description |
+| ----- | ---- | ----- | ----------- |
+| preferred_power_state | [MachinePowerState](#specs.MachinePowerState) |  |  |
+| acceptance_status | [InfraMachineConfigSpec.AcceptanceStatus](#InfraMachineConfigSpec.AcceptanceStatus) |  |  |
+| cluster_talos_version | [string](#string) |  |  |
+| extensions | [string](#string) | repeated |  |
+| wipe_id | [string](#string) |  | WipeId is set to a new id each time the machine gets unallocated.  It is used by the provider to ensure that the machine is wiped between allocations. |
+| extra_kernel_args | [string](#string) |  |  |
+| requested_reboot_id | [string](#string) |  |  |
+| cordoned | [bool](#bool) |  |  |
+| install_event_id | [uint64](#uint64) |  | InstallEventId is a counter, incremented each time Omni receives an event over SideroLink that indicates there is Talos installation on the disk.  This value is then used by the infra provider to make the decision whether Talos is installed or not. It is able to track the installation state by: - Storing a copy of the value of this counter internally after wiping a machine. - Comparing the value of this counter with the stored value to determine if Talos is installed:   It is installed if the value of the counter is greater than the stored value. |
+| node_unique_token | [string](#string) |  | NodeUniqueToken is copied from the corresponding siderolink.Link resource. |
+| power_off_request_id | [string](#string) |  | PowerOffRequestId is generally copied from InfraMachineConfig. Omni may clear this field on the InfraMachine spec when the machine is unallocated or being deallocated, even if the config field remains set. When non-empty, the infra provider should not power on the machine due to cluster allocation alone. The provider determines if the request is still valid by comparing the wipe_id at the time of acknowledgment with the current one: if the machine went through a deallocation cycle (wipe_id changed), the request is considered stale. |
+
+<a name="specs.InfraMachineSpec.MachinePowerState"></a>
+
+### MachinePowerState
+
+| Name | Number | Description |
+| ---- | ------ | ----------- |
+| POWER_STATE_OFF | 0 |  |
+| POWER_STATE_ON | 1 |  |
+
+<a name="specs.InfraMachineStateSpec"></a>
+
+### InfraMachineStateSpec
+
+| Field | Type | Label | Description |
+| ----- | ---- | ----- | ----------- |
+| installed | [bool](#bool) |  |  |
+
+<a name="specs.InfraMachineStatusSpec"></a>
+
+### InfraMachineStatusSpec
+
+| Field | Type | Label | Description |
+| ----- | ---- | ----- | ----------- |
+| power_state | [MachinePowerState](#specs.MachinePowerState) |  |  |
+| ready_to_use | [bool](#bool) |  | ReadyToUse is set to true when the machine is not dirty, i.e., there is no pending wipe operation. |
+| last_reboot_id | [string](#string) |  |  |
+| last_reboot_timestamp | [google.protobuf.Timestamp](#google.protobuf.Timestamp) |  |  |
+| installed | [bool](#bool) |  |  |
+| wiped_node_unique_token | [string](#string) |  | WipedNodeUniqueToken is updated when the bare metal infra provider wipes the machine. It reads the current token from the infra.Machine resource and updates it here. |
+| last_power_off_id | [string](#string) |  | LastPowerOffId is the power-off request ID that the infra provider is currently honoring. It is empty if the provider is not honoring any power-off request, either because there is no active request or because the provider considers the current request stale (e.g., due to the machine going through a deallocation cycle since the request was acknowledged). |
+
+<a name="specs.InfraMachineStatusSpec.MachinePowerState"></a>
+
+### MachinePowerState
+
+| Name | Number | Description |
+| ---- | ------ | ----------- |
+| POWER_STATE_UNKNOWN | 0 |  |
+| POWER_STATE_OFF | 1 |  |
+| POWER_STATE_ON | 2 |  |
+
+ 
+
+<a name="specs/oidc.proto"></a>
+<p align="right"><a href="#top">Top</a></p>
+
+## specs/oidc.proto
+
+<a name="specs.JWTPublicKeySpec"></a>
+
+### JWTPublicKeySpec
+JWTPublicKeySpec keeps the active set of JWT signing keys.
+
+| Field | Type | Label | Description |
+| ----- | ---- | ----- | ----------- |
+| public_key | [bytes](#bytes) |  | PKCS1 encoded RSA public key. |
+| expiration | [google.protobuf.Timestamp](#google.protobuf.Timestamp) |  | Expiration time (when it's ready to be cleaned up). |
+
+ 
+
+<a name="specs/omni.proto"></a>
+<p align="right"><a href="#top">Top</a></p>
+
+## specs/omni.proto
+
+<a name="specs.MachineSpec"></a>
+
+### MachineSpec
+MachineSpec describes a Machine.
+
+| Field | Type | Label | Description |
+| ----- | ---- | ----- | ----------- |
+| management_address | [string](#string) |  | IP which can be used to access Talos API. |
+| connected | [bool](#bool) |  | Connected is copied from the corresponding Link resource. |
+| use_grpc_tunnel | [bool](#bool) |  | UseGrpcTunnel enables using gRPC tunnel for the machine. |
+
+<a name="specs.SecurityState"></a>
+
+### SecurityState
+SecurityState describes the UKI and secure boot information of the machine.
+
+| Field | Type | Label | Description |
+| ----- | ---- | ----- | ----------- |
+| secure_boot | [bool](#bool) |  | SecureBoot is true if secure boot is detected to be available and enabled. |
+| booted_with_uki | [bool](#bool) |  | BootedWithUki is true if the machine is booted with a UKI. Always true if secure boot is enabled. |
+
+<a name="specs.Overlay"></a>
+
+### Overlay
+
+| Field | Type | Label | Description |
+| ----- | ---- | ----- | ----------- |
+| name | [string](#string) |  |  |
+| image | [string](#string) |  |  |
+
+<a name="specs.MetaValue"></a>
+
+### MetaValue
+
+| Field | Type | Label | Description |
+| ----- | ---- | ----- | ----------- |
+| key | [uint32](#uint32) |  |  |
+| value | [string](#string) |  |  |
+
+<a name="specs.MachineStatusSpec"></a>
+
+### MachineStatusSpec
+MachineStatusSpec describes state of a Machine.
+
+| Field | Type | Label | Description |
+| ----- | ---- | ----- | ----------- |
+| talos_version | [string](#string) |  | Talos version. |
+| hardware | [HardwareStatus](#specs.HardwareStatus) |  | Hardware-related information. |
+| network | [NetworkStatus](#specs.NetworkStatus) |  | Network-related information. |
+| last_error | [string](#string) |  | Set if the last poll resulted in an error. |
+| management_address | [string](#string) |  | Management address is copied from the machine resource. |
+| connected | [bool](#bool) |  | Connected is copied from the corresponding Link resource. |
+| maintenance | [bool](#bool) |  | Maintenance flag means that the node is running in the maintenance mode. |
+| cluster | [string](#string) |  | Cluster is the name of the cluster the machine belongs to. |
+| role | [Role](#specs.Role) |  | Role is the role of the machine in the cluster. |
+| platform_metadata | [PlatformMetadata](#specs.PlatformMetadata) |  | Platform-specific information. |
+| image_labels | [string](#string), [string](#string) |  |  |
+| schematic | [Schematic](#specs.Schematic) |  |  |
+| initial_talos_version | [string](#string) |  | InitialTalosVersion is set only once when the machine first joined Omni. |
+| diagnostics | [Diagnostic](#specs.Diagnostic) | repeated |  |
+| power_state | [PowerState](#specs.PowerState) |  |  |
+| security_state | [SecurityState](#specs.SecurityState) |  |  |
+| kernel_cmdline | [string](#string) |  |  |
+
+<a name="specs.MachineStatusSpec.Role"></a>
+
+### Role
+
+| Name | Number | Description |
+| ---- | ------ | ----------- |
+| NONE | 0 |  |
+| CONTROL_PLANE | 1 |  |
+| WORKER | 2 |  |
+
+<a name="specs.MachineStatusSpec.PowerState"></a>
+
+### PowerState
+
+| Name | Number | Description |
+| ---- | ------ | ----------- |
+| POWER_STATE_UNKNOWN | 0 |  |
+| POWER_STATE_UNSUPPORTED | 1 |  |
+| POWER_STATE_ON | 2 |  |
+| POWER_STATE_OFF | 3 |  |
+
+<a name="specs.MachineStatusSpec.HardwareStatus"></a>
+
+### HardwareStatus
+HardwareStatus describes machine hardware status.
+
+| Field | Type | Label | Description |
+| ----- | ---- | ----- | ----------- |
+| processors | [Processor](#specs.Processor) | repeated | CPU information. |
+| memory_modules | [MemoryModule](#specs.MemoryModule) | repeated | Memory information. |
+| blockdevices | [BlockDevice](#specs.BlockDevice) | repeated | Blockdevice information. |
+| arch | [string](#string) |  | Machine architecture. |
+
+<a name="specs.MachineStatusSpec.HardwareStatus.Processor"></a>
+
+### Processor
+Processor describes machine CPU.
+
+| Field | Type | Label | Description |
+| ----- | ---- | ----- | ----------- |
+| core_count | [uint32](#uint32) |  | Number of cores. |
+| thread_count | [uint32](#uint32) |  | Number of threads. |
+| frequency | [uint32](#uint32) |  | CPU frequency in MHz. |
+| description | [string](#string) |  | CPU manufacturer and model. |
+| manufacturer | [string](#string) |  | CPU manufacturer. |
+
+<a name="specs.MachineStatusSpec.HardwareStatus.MemoryModule"></a>
+
+### MemoryModule
+MemoryModule describes machine memory.
+
+| Field | Type | Label | Description |
+| ----- | ---- | ----- | ----------- |
+| size_mb | [uint32](#uint32) |  | Size of memory in MB. |
+| description | [string](#string) |  | Memory manufacturer and model. |
+
+<a name="specs.MachineStatusSpec.HardwareStatus.BlockDevice"></a>
+
+### BlockDevice
+BlockDevice describes a block device.
+
+| Field | Type | Label | Description |
+| ----- | ---- | ----- | ----------- |
+| size | [uint64](#uint64) |  | Size indicates the disk size in bytes. |
+| model | [string](#string) |  | Model idicates the disk model. |
+| linux_name | [string](#string) |  | Linux blockdevice name (e.g. `/dev/sda`). |
+| name | [string](#string) |  | Name as in `/sys/block/<dev>/device/name`. |
+| serial | [string](#string) |  | Serial as in `/sys/block/<dev>/device/serial`. |
+| uuid | [string](#string) |  | Uuid as in `/sys/block/<dev>/device/uuid`. |
+| wwid | [string](#string) |  | Wwid as in `/sys/block/<dev>/device/wwid`. |
+| type | [string](#string) |  | Type is a type of the disk: nvme, ssd, hdd, sd card. |
+| bus_path | [string](#string) |  | BusPath is the bus path of the disk. |
+| system_disk | [bool](#bool) |  | SystemDisk is the system disk flag. |
+| readonly | [bool](#bool) |  | Readonly disk. |
+| transport | [string](#string) |  | Transport is the disk transport. |
+
+<a name="specs.MachineStatusSpec.NetworkStatus"></a>
+
+### NetworkStatus
+NetworkStatus describes the status of a machine network .
+
+| Field | Type | Label | Description |
+| ----- | ---- | ----- | ----------- |
+| hostname | [string](#string) |  | Current machine hostname. |
+| domainname | [string](#string) |  | Current machine domainname. |
+| addresses | [string](#string) | repeated | List of machine IPs. |
+| default_gateways | [string](#string) | repeated | List of default gateway IPs. |
+| network_links | [NetworkLinkStatus](#specs.NetworkLinkStatus) | repeated | List of physical network interfaces. |
+
+<a name="specs.MachineStatusSpec.NetworkStatus.NetworkLinkStatus"></a>
+
+### NetworkLinkStatus
+Physical network interfaces.
+
+| Field | Type | Label | Description |
+| ----- | ---- | ----- | ----------- |
+| linux_name | [string](#string) |  | Linux interface name. |
+| hardware_address | [string](#string) |  | MAC address. |
+| speed_mbps | [uint32](#uint32) |  | Speed in Mbps. |
+| link_up | [bool](#bool) |  | Link status. |
+| description | [string](#string) |  | Hardware description. |
+
+<a name="specs.MachineStatusSpec.PlatformMetadata"></a>
+
+### PlatformMetadata
+PlatformMetadata describes platform-specific information.
+
+| Field | Type | Label | Description |
+| ----- | ---- | ----- | ----------- |
+| platform | [string](#string) |  | Platform is the name of the platform (e.g. `aws`, `gcp`, `azure`). |
+| hostname | [string](#string) |  | Hostname is the hostname of the machine. |
+| region | [string](#string) |  | Region (in the cloud). |
+| zone | [string](#string) |  | Availability zone (in the cloud). |
+| instance_type | [string](#string) |  | Instance type (in the cloud). |
+| instance_id | [string](#string) |  | Instance ID (in the cloud). |
+| provider_id | [string](#string) |  | Provider ID (for the Node resource). |
+| spot | [bool](#bool) |  | Spot instance flag. |
+
+<a name="specs.MachineStatusSpec.Schematic"></a>
+
+### Schematic
+
+| Field | Type | Label | Description |
+| ----- | ---- | ----- | ----------- |
+| id | [string](#string) |  | Id is the image factory schematic id used for the image generation.  This must be be plain id computed solely from the system extensions, not including the kernel command line arguments, META content etc. |
+| invalid | [bool](#bool) |  | Invalid marks the machine as having extensions installed bypassing image factory. Which makes it impossible to detect schematic id and manage the image generation using image factory. |
+| extensions | [string](#string) | repeated | Extensions is the list of extensions installed on the machine. |
+| initial_schematic | [string](#string) |  | InitialSchematic is the one first schematic the machine was using when it was connected to Omni for the first time. |
+| overlay | [Overlay](#specs.Overlay) |  | Overlay contains the information about the overlay used during the machine image generation. It is used by SBC images. |
+| kernel_args | [string](#string) | repeated | KernelArgs is the kernel command line arguments used during the machine image generation. |
+| meta_values | [MetaValue](#specs.MetaValue) | repeated | MetaValues is the list of meta values used during the machine image generation. |
+| full_id | [string](#string) |  | FullId is the full id of the schematic - including the kernel command line arguments, META content etc.  It is used instead of Id primarily when the machine has secure boot enabled. |
+| in_agent_mode | [bool](#bool) |  | InAgentMode indicates that the machine is running in agent mode. |
+| raw | [string](#string) |  | Raw contains the raw schematic data YAML as a string. |
+| initial_state | [InitialState](#specs.InitialState) |  | InitialState is the initial schematic configuration of the machine. |
+
+<a name="specs.MachineStatusSpec.Schematic.InitialState"></a>
+
+### InitialState
+
+| Field | Type | Label | Description |
+| ----- | ---- | ----- | ----------- |
+| extensions | [string](#string) | repeated |  |
+
+<a name="specs.MachineStatusSpec.Diagnostic"></a>
+
+### Diagnostic
+
+| Field | Type | Label | Description |
+| ----- | ---- | ----- | ----------- |
+| id | [string](#string) |  |  |
+| message | [string](#string) |  |  |
+| details | [string](#string) | repeated |  |
+
+<a name="specs.TalosConfigSpec"></a>
+
+### TalosConfigSpec
+TalosConfigSpec describes a Talos cluster config.
+
+| Field | Type | Label | Description |
+| ----- | ---- | ----- | ----------- |
+| ca | [string](#string) |  | Ca certificate authority. |
+| crt | [string](#string) |  | Crt certificate. |
+| key | [string](#string) |  | Key certificate key. |
+
+<a name="specs.ClusterSpec"></a>
+
+### ClusterSpec
+Cluster describes a Talos cluster.
+
+| Field | Type | Label | Description |
+| ----- | ---- | ----- | ----------- |
+| kubernetes_version | [string](#string) |  | KubernetesVersion to use on the node. |
+| talos_version | [string](#string) |  | TalosVersion cluster wide Talos version. |
+| features | [Features](#specs.Features) |  | Features are the cluster features. |
+| backup_configuration | [EtcdBackupConf](#specs.EtcdBackupConf) |  | Backup describes the backup configuration. If it set to null that means that backups are disabled for this cluster. |
+
+<a name="specs.ClusterSpec.Features"></a>
+
+### Features
+
+| Field | Type | Label | Description |
+| ----- | ---- | ----- | ----------- |
+| enable_workload_proxy | [bool](#bool) |  | EnableWorkloadProxy enables workload proxy. |
+| disk_encryption | [bool](#bool) |  | DiskEncryption enables disk encryption on all nodes. |
+| use_embedded_discovery_service | [bool](#bool) |  | UseEmbeddedDiscoveryService enables the embedded discovery service. |
+
+ 
+
+<a name="specs/siderolink.proto"></a>
+<p align="right"><a href="#top">Top</a></p>
+
+## specs/siderolink.proto
+
+<a name="specs.SiderolinkConfigSpec"></a>
+
+### SiderolinkConfigSpec
+SiderolinkConfigSpec describes siderolink wireguard server state to persist it across restarts.
+
+| Field | Type | Label | Description |
+| ----- | ---- | ----- | ----------- |
+| private_key | [string](#string) |  |  |
+| public_key | [string](#string) |  |  |
+| wireguard_endpoint | [string](#string) |  |  |
+| subnet | [string](#string) |  |  |
+| server_address | [string](#string) |  |  |
+| initial_join_token | [string](#string) |  |  |
+| advertised_endpoint | [string](#string) |  |  |
+
+<a name="specs.SiderolinkSpec"></a>
+
+### SiderolinkSpec
+SiderolinkSpec describes each node connection information.
+
+| Field | Type | Label | Description |
+| ----- | ---- | ----- | ----------- |
+| node_subnet | [string](#string) |  |  |
+| node_public_key | [string](#string) |  |  |
+| last_endpoint | [string](#string) |  |  |
+| connected | [bool](#bool) |  |  |
+| virtual_addrport | [string](#string) |  |  |
+| remote_addr | [string](#string) |  | RemoteAddr is the machine address how it's visible from Omni it is determined by reading X-Forwarded-For header coming from the gRPC API. |
+| node_unique_token | [string](#string) |  |  |
+
+<a name="specs.LinkStatusSpec"></a>
+
+### LinkStatusSpec
+LinkStatusSpec is created when the link peer event was submitted.
+
+| Field | Type | Label | Description |
+| ----- | ---- | ----- | ----------- |
+| node_subnet | [string](#string) |  |  |
+| node_public_key | [string](#string) |  |  |
+| virtual_addrport | [string](#string) |  |  |
+| link_id | [string](#string) |  | LinkId is the ID of the resource which created the link status. |
+
+<a name="specs.SiderolinkCounterSpec"></a>
+
+### SiderolinkCounterSpec
+SiderolinkConnectionSpec describes each node connection information.
+
+| Field | Type | Label | Description |
+| ----- | ---- | ----- | ----------- |
+| bytes_received | [int64](#int64) |  |  |
+| bytes_sent | [int64](#int64) |  |  |
+| last_alive | [google.protobuf.Timestamp](#google.protobuf.Timestamp) |  |  |
+
+<a name="specs.ConnectionParamsSpec"></a>
+
+### ConnectionParamsSpec
+ConnectionParamsSpec describes generated kernel parameters for connecting the Talos node to Omni.
+
+| Field | Type | Label | Description |
+| ----- | ---- | ----- | ----------- |
+| args | [string](#string) |  | Args keeps the generated kernel arguments string. |
+| api_endpoint | [string](#string) |  | ApiEndpoint is the service gRPC API endpoint (external domain/ip, schema and port). |
+| wireguard_endpoint | [string](#string) |  | WireguardEndpoint is the service IP visible from the internal SideroLink network. |
+| join_token | [string](#string) |  | JoinToken is the default join token that can be used to connect to SideroLink. |
+| use_grpc_tunnel | [bool](#bool) |  | UseGRPCTunnel is a flag to enable gRPC tunneling. |
+| events_port | [int32](#int32) |  | EventsPort is the siderolink events port. |
+| logs_port | [int32](#int32) |  | LogsPort is the logs port. |
+
+<a name="specs.PendingMachineStatusSpec"></a>
+
+### PendingMachineStatusSpec
+PendingMachineStatusSpec describes the spec of the pending machine status resource.
+
+| Field | Type | Label | Description |
+| ----- | ---- | ----- | ----------- |
+| token | [string](#string) |  |  |
+| talos_installed | [bool](#bool) |  |  |
+
+<a name="specs.JoinConfig"></a>
+
+### JoinConfig
+
+| Field | Type | Label | Description |
+| ----- | ---- | ----- | ----------- |
+| kernel_args | [string](#string) | repeated |  |
+| config | [string](#string) |  |  |
+
+<a name="specs.SiderolinkAPIConfigSpec"></a>
+
+### SiderolinkAPIConfigSpec
+
+| Field | Type | Label | Description |
+| ----- | ---- | ----- | ----------- |
+| machine_api_advertised_url | [string](#string) |  | MachineApiAdvertisedUrl is the machine service gRPC API URL (external domain/ip, schema and port). Talos nodes use this API to get the siderolink connection params, key management server also runs there. |
+| wireguard_advertised_endpoint | [string](#string) |  | WireguardAdvertisedEndpoint is the service IP visible from the internal SideroLink network. |
+| enforce_grpc_tunnel | [bool](#bool) |  | EnforceGRPCTunnel is a flag to enable gRPC tunneling. |
+| events_port | [int32](#int32) |  | EventsPort is the siderolink events port. |
+| logs_port | [int32](#int32) |  | LogsPort is the logs port. |
+
+<a name="specs.ProviderJoinConfigSpec"></a>
+
+### ProviderJoinConfigSpec
+
+| Field | Type | Label | Description |
+| ----- | ---- | ----- | ----------- |
+| config | [JoinConfig](#specs.JoinConfig) |  |  |
+| join_token | [string](#string) |  |  |
+
+<a name="specs.MachineJoinConfigSpec"></a>
+
+### MachineJoinConfigSpec
+
+| Field | Type | Label | Description |
+| ----- | ---- | ----- | ----------- |
+| config | [JoinConfig](#specs.JoinConfig) |  |  |
+
+<a name="specs.NodeUniqueTokenSpec"></a>
+
+### NodeUniqueTokenSpec
+
+| Field | Type | Label | Description |
+| ----- | ---- | ----- | ----------- |
+| token | [string](#string) |  | Token is the per node join token which is saved in the Node META partition after the machine is accepted in Omni. Only for Talos >= 1.6. |
+
+<a name="specs.NodeUniqueTokenStatusSpec"></a>
+
+### NodeUniqueTokenStatusSpec
+
+| Field | Type | Label | Description |
+| ----- | ---- | ----- | ----------- |
+| state | [State](#specs.State) |  |  |
+
+<a name="specs.NodeUniqueTokenStatusSpec.State"></a>
+
+### State
+
+| Name | Number | Description |
+| ---- | ------ | ----------- |
+| UNKNOWN | 0 |  |
+| PERSISTENT | 1 |  |
+| EPHEMERAL | 2 |  |
+| NONE | 3 |  |
+| UNSUPPORTED | 4 |  |
+
+<a name="specs.JoinTokenSpec"></a>
+
+### JoinTokenSpec
+JoinTokenSpec keeps the node join tokens.
+
+| Field | Type | Label | Description |
+| ----- | ---- | ----- | ----------- |
+| expiration_time | [google.protobuf.Timestamp](#google.protobuf.Timestamp) |  | ExpirationTime is the lifetime of the token. |
+| revoked | [bool](#bool) |  | Revoked allows to revoke the token before it expires. |
+| name | [string](#string) |  | Name is the human readable join token description. |
+
+<a name="specs.JoinTokenStatusSpec"></a>
+
+### JoinTokenStatusSpec
+JoinTokenStatusSpec is the status of the join token.
+
+| Field | Type | Label | Description |
+| ----- | ---- | ----- | ----------- |
+| state | [State](#specs.State) |  | State of the token. |
+| is_default | [bool](#bool) |  | IsDefault is set on the join token which used by default. |
+| use_count | [uint64](#uint64) |  | UseCount is the number of links that are using the join token. |
+| expiration_time | [google.protobuf.Timestamp](#google.protobuf.Timestamp) |  | ExpirationTime is copied from the JoinTokenSpec. |
+| name | [string](#string) |  | Name is copied from the JoinTokenSpec. |
+| warnings | [Warning](#specs.Warning) | repeated | Warnings keeps the list of machines which might be broken if the token is revoked. |
+
+<a name="specs.JoinTokenStatusSpec.State"></a>
+
+### State
+
+| Name | Number | Description |
+| ---- | ------ | ----------- |
+| UNKNOWN | 0 |  |
+| ACTIVE | 1 |  |
+| REVOKED | 2 |  |
+| EXPIRED | 3 |  |
+
+<a name="specs.JoinTokenStatusSpec.Warning"></a>
+
+### Warning
+
+| Field | Type | Label | Description |
+| ----- | ---- | ----- | ----------- |
+| machine | [string](#string) |  |  |
+| message | [string](#string) |  |  |
+
+<a name="specs.JoinTokenUsageSpec"></a>
+
+### JoinTokenUsageSpec
+JoinTokenUsageSpec creates a mapping that connects links and join tokens.
+
+| Field | Type | Label | Description |
+| ----- | ---- | ----- | ----------- |
+| token_id | [string](#string) |  |  |
+
+<a name="specs.DefaultJoinTokenSpec"></a>
+
+### DefaultJoinTokenSpec
+DefaultJoinTokenSpec is used to mark some join token as the default one.
+
+| Field | Type | Label | Description |
+| ----- | ---- | ----- | ----------- |
+| token_id | [string](#string) |  |  |
+
+<a name="specs.GRPCTunnelConfigSpec"></a>
+
+### GRPCTunnelConfigSpec
+GRPCTunnelConfig is the user managed resource that allows configuring gRPC tunnel per machine.
+
+| Field | Type | Label | Description |
+| ----- | ---- | ----- | ----------- |
+| enabled | [bool](#bool) |  |  |
+
+ 
+
+<a name="specs/system.proto"></a>
+<p align="right"><a href="#top">Top</a></p>
+
+## specs/system.proto
+
+<a name="specs.DBVersionSpec"></a>
+
+### DBVersionSpec
+DBVersionSpec keeps the current version of the COSI DB.
+
+| Field | Type | Label | Description |
+| ----- | ---- | ----- | ----------- |
+| version | [uint64](#uint64) |  |  |
+
+<a name="specs.SysVersionSpec"></a>
+
+### SysVersionSpec
+SysVersionSpec keeps the current version of Omni.
+
+| Field | Type | Label | Description |
+| ----- | ---- | ----- | ----------- |
+| backend_version | [string](#string) |  |  |
+| instance_name | [string](#string) |  |  |
+| backend_api_version | [uint32](#uint32) |  |  |
+
+ 
+
+<a name="specs/virtual.proto"></a>
+<p align="right"><a href="#top">Top</a></p>
+
+## specs/virtual.proto
+
+<a name="specs.CurrentUserSpec"></a>
+
+### CurrentUserSpec
+
+| Field | Type | Label | Description |
+| ----- | ---- | ----- | ----------- |
+| identity | [string](#string) |  |  |
+| role | [string](#string) |  |  |
+| user_id | [string](#string) |  |  |
+
+<a name="specs.PermissionsSpec"></a>
+
+### PermissionsSpec
+
+| Field | Type | Label | Description |
+| ----- | ---- | ----- | ----------- |
+| can_read_clusters | [bool](#bool) |  |  |
+| can_create_clusters | [bool](#bool) |  |  |
+| can_manage_users | [bool](#bool) |  |  |
+| can_read_machines | [bool](#bool) |  |  |
+| can_remove_machines | [bool](#bool) |  |  |
+| can_read_machine_logs | [bool](#bool) |  |  |
+| can_read_machine_config_patches | [bool](#bool) |  |  |
+| can_manage_machine_config_patches | [bool](#bool) |  |  |
+| can_manage_backup_store | [bool](#bool) |  |  |
+| can_access_maintenance_nodes | [bool](#bool) |  |  |
+| can_read_audit_log | [bool](#bool) |  |  |
+| can_read_join_tokens | [bool](#bool) |  |  |
+| can_manage_join_tokens | [bool](#bool) |  |  |
+| can_read_installation_media | [bool](#bool) |  |  |
+| can_manage_installation_media | [bool](#bool) |  |  |
+
+<a name="specs.ClusterPermissionsSpec"></a>
+
+### ClusterPermissionsSpec
+
+| Field | Type | Label | Description |
+| ----- | ---- | ----- | ----------- |
+| can_add_machines | [bool](#bool) |  |  |
+| can_remove_machines | [bool](#bool) |  |  |
+| can_reboot_machines | [bool](#bool) |  |  |
+| can_update_kubernetes | [bool](#bool) |  |  |
+| can_download_kubeconfig | [bool](#bool) |  |  |
+| can_sync_kubernetes_manifests | [bool](#bool) |  |  |
+| can_update_talos | [bool](#bool) |  |  |
+| can_download_talosconfig | [bool](#bool) |  |  |
+| can_read_config_patches | [bool](#bool) |  |  |
+| can_manage_config_patches | [bool](#bool) |  |  |
+| can_manage_cluster_features | [bool](#bool) |  |  |
+| can_download_support_bundle | [bool](#bool) |  |  |
+| can_read_machine_config | [bool](#bool) |  |  |
+| can_manage_machine_config | [bool](#bool) |  |  |
+| can_read_kernel_args | [bool](#bool) |  |  |
+| can_manage_kernel_args | [bool](#bool) |  |  |
+| can_read_machine_pending_updates | [bool](#bool) |  |  |
+
+<a name="specs.LabelsCompletionSpec"></a>
+
+### LabelsCompletionSpec
+
+| Field | Type | Label | Description |
+| ----- | ---- | ----- | ----------- |
+| items | [string](#string), [Values](#specs.Values) |  |  |
+
+<a name="specs.LabelsCompletionSpec.Values"></a>
+
+### Values
+
+| Field | Type | Label | Description |
+| ----- | ---- | ----- | ----------- |
+| items | [string](#string) | repeated |  |
+
+<a name="specs.AdvertisedEndpointsSpec"></a>
+
+### AdvertisedEndpointsSpec
+
+| Field | Type | Label | Description |
+| ----- | ---- | ----- | ----------- |
+| grpc_api_url | [string](#string) |  |  |
+
+<a name="specs.PlatformConfigSpec"></a>
+
+### PlatformConfigSpec
+
+| Field | Type | Label | Description |
+| ----- | ---- | ----- | ----------- |
+| label | [string](#string) |  |  |
+| description | [string](#string) |  |  |
+| architectures | [Arch](#specs.Arch) | repeated |  |
+| documentation | [string](#string) |  |  |
+| disk_image_suffix | [string](#string) |  |  |
+| boot_methods | [BootMethod](#specs.BootMethod) | repeated |  |
+| min_version | [string](#string) |  |  |
+| secure_boot_supported | [bool](#bool) |  |  |
+
+<a name="specs.PlatformConfigSpec.BootMethod"></a>
+
+### BootMethod
+
+| Name | Number | Description |
+| ---- | ------ | ----------- |
+| UNKNOWN_BOOT | 0 |  |
+| DISK_IMAGE | 1 |  |
+| ISO | 2 |  |
+| PXE | 3 |  |
+
+<a name="specs.PlatformConfigSpec.Arch"></a>
+
+### Arch
+
+| Name | Number | Description |
+| ---- | ------ | ----------- |
+| UNKNOWN_ARCH | 0 |  |
+| AMD64 | 1 |  |
+| ARM64 | 2 |  |
+
+<a name="specs.SBCConfigSpec"></a>
+
+### SBCConfigSpec
+
+| Field | Type | Label | Description |
+| ----- | ---- | ----- | ----------- |
+| label | [string](#string) |  |  |
+| overlay_name | [string](#string) |  |  |
+| overlay_image | [string](#string) |  |  |
+| documentation | [string](#string) |  |  |
+| min_version | [string](#string) |  |  |
+
+<a name="specs.OfficeHoursConfig"></a>
+
+### OfficeHoursConfig
+
+| Field | Type | Label | Description |
+| ----- | ---- | ----- | ----------- |
+| summary | [string](#string) |  |  |
+| description | [string](#string) |  |  |
+| dtstart_tzid | [string](#string) |  |  |
+| dtend_tzid | [string](#string) |  |  |
+| dtstart_utc | [string](#string) |  |  |
+| dtend_utc | [string](#string) |  |  |
+| rrule | [string](#string) |  |  |
+| meet_url | [string](#string) |  |  |
+
+<a name="specs.SupportSpec"></a>
+
+### SupportSpec
+
+| Field | Type | Label | Description |
+| ----- | ---- | ----- | ----------- |
+| support_enabled | [bool](#bool) |  |  |
+| office_hours | [OfficeHoursConfig](#specs.OfficeHoursConfig) |  |  |
+
+<a name="specs.QuirksSpec"></a>
+
+### QuirksSpec
+
+| Field | Type | Label | Description |
+| ----- | ---- | ----- | ----------- |
+| supports_unified_installer | [bool](#bool) |  |  |
+| supports_factory_talosctl | [bool](#bool) |  |  |
+
+ 
+
+## Scalar Value Types
+
+| .proto Type | Notes | C++ | Java | Python | Go | C# | PHP | Ruby |
+| ----------- | ----- | --- | ---- | ------ | -- | -- | --- | ---- |
+| <a name="double" /> double |  | double | double | float | float64 | double | float | Float |
+| <a name="float" /> float |  | float | float | float | float32 | float | float | Float |
+| <a name="int32" /> int32 | Uses variable-length encoding. Inefficient for encoding negative numbers – if your field is likely to have negative values, use sint32 instead. | int32 | int | int | int32 | int | integer | Bignum or Fixnum (as required) |
+| <a name="int64" /> int64 | Uses variable-length encoding. Inefficient for encoding negative numbers – if your field is likely to have negative values, use sint64 instead. | int64 | long | int/long | int64 | long | integer/string | Bignum |
+| <a name="uint32" /> uint32 | Uses variable-length encoding. | uint32 | int | int/long | uint32 | uint | integer | Bignum or Fixnum (as required) |
+| <a name="uint64" /> uint64 | Uses variable-length encoding. | uint64 | long | int/long | uint64 | ulong | integer/string | Bignum or Fixnum (as required) |
+| <a name="sint32" /> sint32 | Uses variable-length encoding. Signed int value. These more efficiently encode negative numbers than regular int32s. | int32 | int | int | int32 | int | integer | Bignum or Fixnum (as required) |
+| <a name="sint64" /> sint64 | Uses variable-length encoding. Signed int value. These more efficiently encode negative numbers than regular int64s. | int64 | long | int/long | int64 | long | integer/string | Bignum |
+| <a name="fixed32" /> fixed32 | Always four bytes. More efficient than uint32 if values are often greater than 2^28. | uint32 | int | int | uint32 | uint | integer | Bignum or Fixnum (as required) |
+| <a name="fixed64" /> fixed64 | Always eight bytes. More efficient than uint64 if values are often greater than 2^56. | uint64 | long | int/long | uint64 | ulong | integer/string | Bignum |
+| <a name="sfixed32" /> sfixed32 | Always four bytes. | int32 | int | int | int32 | int | integer | Bignum or Fixnum (as required) |
+| <a name="sfixed64" /> sfixed64 | Always eight bytes. | int64 | long | int/long | int64 | long | integer/string | Bignum |
+| <a name="bool" /> bool |  | bool | boolean | boolean | bool | bool | boolean | TrueClass/FalseClass |
+| <a name="string" /> string | A string must always contain UTF-8 encoded or 7-bit ASCII text. | string | String | str/unicode | string | string | string | String (UTF-8) |
+| <a name="bytes" /> bytes | May contain any arbitrary sequence of bytes. | string | ByteString | str | []byte | ByteString | string | String (ASCII-8BIT) |

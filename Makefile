@@ -156,12 +156,31 @@ generate-talos-reference-local: ## Generate Talos reference docs using local Go 
 
 OMNI_CONFIG_SCHEMA_URL ?= https://raw.githubusercontent.com/siderolabs/omni/refs/heads/main/internal/pkg/config/schema.json
 OMNI_CONFIG_REF_PATH := public/omni/reference/omni-configuration.mdx
+OMNI_API_GEN_IMAGE := ghcr.io/siderolabs/omni-api-gen:latest
+OMNI_API_REF_PATH := public/omni/reference/api.mdx
 
 .PHONY: generate-omni-config-reference
 generate-omni-config-reference: ## Generate Omni configuration reference docs from JSON schema
 	@echo "Generating Omni configuration reference..."
 	cd omni-config-gen && go run . $(OMNI_CONFIG_SCHEMA_URL) > ../$(OMNI_CONFIG_REF_PATH)
 	@echo "Reference documentation generated at $(OMNI_CONFIG_REF_PATH)"
+
+.PHONY: generate-omni-reference
+generate-omni-reference: ## Generate Omni API reference docs from proto files
+	docker pull $(OMNI_API_GEN_IMAGE)
+	docker run --rm -v $(PWD):/workspace -w /workspace \
+		-e GITHUB_TOKEN=$(GITHUB_TOKEN) \
+		$(OMNI_API_GEN_IMAGE) --output $(OMNI_API_REF_PATH)
+
+.PHONY: generate-omni-reference-local
+generate-omni-reference-local: ## Generate Omni API reference docs using local Go build
+	@echo "Generating Omni API reference documentation..."
+	cd omni-api-gen && go run . --output ../$(OMNI_API_REF_PATH)
+	@echo "API reference generated at $(OMNI_API_REF_PATH)"
+
+.PHONY: build-omni-api-gen-container
+build-omni-api-gen-container: ## Build the omni-api-gen container locally
+	docker build -t $(OMNI_API_GEN_IMAGE) ./omni-api-gen
 
 .PHONY: vale
 vale: ## Run Vale on a file or directory: make vale DOC=public/path/to/file.mdx
@@ -193,8 +212,8 @@ changelog: ## Generate the changelog from GitHub releases
 	docker pull $(CHANGELOG_GEN_IMAGE)
 	docker run --rm -v $(PWD):/workspace -w /workspace \
 		-e GITHUB_TOKEN=$(GITHUB_TOKEN) \
-		$(CHANGELOG_GEN_IMAGE) --output public/changelog/changelog.mdx
+		$(CHANGELOG_GEN_IMAGE) --output public/changelog.mdx
 
 .PHONY: changelog-local
 changelog-local: ## Generate the changelog using local Go build
-	cd changelog-gen && go run . --output ../public/changelog/changelog.mdx
+	cd changelog-gen && go run . --output ../public/changelog.mdx
