@@ -3,6 +3,6 @@ navigation:
     - tab: "Changelog"
       groups:
         - group: "Changelog"
-          folder: "changelog"
+          folder: "/"
           pages:
             - "changelog.mdx"

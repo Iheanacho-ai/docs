@@ -193,8 +193,8 @@ changelog: ## Generate the changelog from GitHub releases
 	docker pull $(CHANGELOG_GEN_IMAGE)
 	docker run --rm -v $(PWD):/workspace -w /workspace \
 		-e GITHUB_TOKEN=$(GITHUB_TOKEN) \
-		$(CHANGELOG_GEN_IMAGE) --output public/changelog/changelog.mdx
+		$(CHANGELOG_GEN_IMAGE) --output public/changelog.mdx
 
 .PHONY: changelog-local
 changelog-local: ## Generate the changelog using local Go build
-	cd changelog-gen && go run . --output ../public/changelog/changelog.mdx
+	cd changelog-gen && go run . --output ../public/changelog.mdx

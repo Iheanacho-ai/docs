@@ -2813,7 +2813,7 @@
           {
             "group": "Changelog",
             "pages": [
-              "changelog/changelog"
+              "/changelog"
             ]
           }
         ]

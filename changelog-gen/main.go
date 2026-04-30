@@ -77,7 +77,7 @@ rss: true
 `
 
 func main() {
-	output := flag.String("output", "public/changelog/changelog.mdx", "Output file path")
+	output := flag.String("output", "public/changelog.mdx", "Output file path")
 	flag.Parse()
 
 	// GITHUB_TOKEN is read from the environment. Set it to avoid the 60 req/hr
