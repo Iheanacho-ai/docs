@@ -35,7 +35,7 @@ In order to minimize access in the case of these credentials being compromised, 
 Clone the git repository.
 
 ```bash
-git clone https://github.com/zebernst/synology-csi-talos.git
+git clone https://github.com/SynologyOpenSource/synology-csi.git
 ```
 
 While Synology provides some automated scripts to deploy the CSI driver, they can be finicky especially when making changes to the source code.
@@ -81,21 +81,28 @@ clients:
 Create a Kubernetes secret using the client information config file.
 
 ```bash
-kubectl create secret -n synology-csi generic client-info-secret --from-file=config/client-info.yml
+kubectl create secret -n synology-csi generic client-info-secret \
+  --from-file=config/client-info.yml
 ```
 
 Note that if you rename the secret to something other than `client-info-secret`, make sure you update the corresponding references in the deployment manifests as well.
 
-### Build the Talos-compatible image
-
-Modify the `Makefile` so that the image is built and tagged under your GitHub Container Registry username:
-
-```makefile
-REGISTRY_NAME=ghcr.io/<username>
+## Configure node.yaml for Talos
+ 
+The official `synology-csi` driver supports Talos Linux as of v1.2.1.
+You do not need to build a custom image.
+Use `synologyopensource/synology-csi:v1.2.1` (or `latest`) directly.
+ 
+To run correctly on Talos, you must add two arguments to the node plugin container in `deploy/kubernetes/v1.20/node.yml`:
+ 
+```yaml
+args:
+  - --chroot-dir=/host
+  - --iscsiadm-path=/usr/local/sbin/iscsiadm
 ```
-
-When you run `make docker-build` or `make docker-build-multiarch`, it will push the resulting image to `ghcr.io/<username>/synology-csi:v1.1.0`.
-Ensure that you find and change any reference to `synology/synology-csi:v1.1.0` to point to your newly-pushed image within the deployment manifests.
+ 
+These arguments tell the driver where to find the host filesystem and the `iscsiadm` binary that Talos provides via the `iscsi-tools` extension.
+Without them, the driver will fail with `chroot: can't execute '/usr/bin/env': No such file or directory`.
 
 ### Configure the CSI driver
 
