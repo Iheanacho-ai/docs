@@ -5,16 +5,36 @@ aliases:
   - ../../guides/pod-security
 ---
 
-Seccomp stands for secure computing mode and has been a feature of the Linux kernel since version 2.6.12.
-It can be used to sandbox the privileges of a process, restricting the calls it is able to make from userspace into the kernel.
+Seccomp (secure computing mode) is a Linux kernel feature that restricts the system calls a process can make.
+For more details, see the [Kubernetes seccomp tutorial](https://kubernetes.io/docs/tutorials/security/seccomp/).
 
-Refer to the [Kubernetes Seccomp Guide](https://kubernetes.io/docs/tutorials/security/seccomp/) for more details.
-
-In this guide we are going to configure a custom Seccomp Profile that logs all syscalls made by the workload.
+This guide declares a custom seccomp profile that logs every system call a workload makes, and runs a pod with it.
 
 ## Prepare the nodes
 
-Create and apply a machine config patch with the contents below:
+Talos Linux writes each seccomp profile declared in the machine configuration to `/var/lib/kubelet/seccomp/profiles/<name>` on the node.
+Save one of the following patches as `seccomp-patch.yaml`, depending on the Talos version of the nodes:
+
+<Tabs>
+<Tab title="Talos v1.15+">
+
+Talos 1.15 declares each profile in its own [SeccompProfileConfig](../../talos/v1.15/reference/configuration/cri/seccompprofileconfig) document:
+
+```yaml
+apiVersion: v1alpha1
+kind: SeccompProfileConfig
+name: audit.json
+profile:
+  defaultAction: SCMP_ACT_LOG
+```
+
+The `.machine.seccompProfiles` field still works in Talos 1.15, but it is deprecated.
+A `SeccompProfileConfig` document can't use the name of a profile that `.machine.seccompProfiles` already declares.
+
+</Tab>
+<Tab title="Talos < v1.15">
+
+Earlier Talos versions declare the profiles in the `.machine.seccompProfiles` field:
 
 ```yaml
 machine:
@@ -24,9 +44,44 @@ machine:
         defaultAction: SCMP_ACT_LOG
 ```
 
-This would create a seccomp profile named `audit.json` on the node at `/var/lib/kubelet/seccomp/profiles`.
+</Tab>
+</Tabs>
 
-The profiles can be used by Kubernetes pods by specifying the pod `securityContext` as below:
+Apply the patch to the nodes:
+
+```bash
+talosctl -n <node-ip> patch machineconfig --patch @seccomp-patch.yaml
+```
+
+Check that the profile exists:
+
+```bash
+talosctl -n <node-ip> get seccompprofiles
+```
+
+The output is similar to the following:
+
+```text
+NODE       NAMESPACE   TYPE             ID           VERSION
+10.5.0.3   cri         SeccompProfile   audit.json   1
+```
+
+To view the content of the profile, read the file on the node:
+
+```bash
+talosctl -n <node-ip> read /var/lib/kubelet/seccomp/profiles/audit.json
+```
+
+The output is the profile in JSON:
+
+```text
+{"defaultAction":"SCMP_ACT_LOG"}
+```
+
+## Run a workload with the profile
+
+Pods use a profile from the node by setting a `Localhost` seccomp profile in their `securityContext`.
+The `localhostProfile` path is relative to `/var/lib/kubelet/seccomp`, so it starts with `profiles/`:
 
 ```yaml
 spec:
@@ -36,75 +91,35 @@ spec:
       localhostProfile: profiles/audit.json
 ```
 
-<Note>The `localhostProfile` uses the name of the profile created under `profiles` directory. So make sure to use path as `profiles/<profile-name.json>`</Note>
-
-This can be verified by running the following command:
-
-```bash
-talosctl -n <node-ip> get seccompprofiles
-```
-
-An output similar to below can be observed:
-
-```text
-NODE       NAMESPACE   TYPE             ID           VERSION
-10.5.0.3   cri         SeccompProfile   audit.json   1
-```
-
-The content of the seccomp profile can be viewed by running the following command:
-
-```bash
-talosctl -n <node-ip> read /var/lib/kubelet/seccomp/profiles/audit.json
-```
-
-An output similar to below can be observed:
-
-```text
-{"defaultAction":"SCMP_ACT_LOG"}
-```
-
-## Create a Kubernetes workload that uses the custom Seccomp profile
-
-Here we'll be using an example workload from the Kubernetes [documentation](https://kubernetes.io/docs/tutorials/security/seccomp/).
-
-First open up a second terminal and run the following talosctl command so that we can view the Syscalls being logged in realtime:
-
-```bash
-talosctl -n <node-ip> dmesg --follow --tail
-```
-
-Now deploy the example workload from the Kubernetes documentation:
+The example pod from the [Kubernetes seccomp tutorial](https://kubernetes.io/docs/tutorials/security/seccomp/) uses this profile.
+Deploy it:
 
 ```bash
 kubectl apply -f https://k8s.io/examples/pods/security/seccomp/ga/audit-pod.yaml
 ```
 
-Once the pod starts running the terminal running `talosctl dmesg` command from above should log similar to below:
+Talos Linux records the system calls logged by the profile in the `auditd` service log.
+View them:
 
-```text
-10.5.0.3: kern:    info: [2022-07-28T11:49:42.489473063Z]: cni0: port 1(veth32488a86) entered blocking state
-10.5.0.3: kern:    info: [2022-07-28T11:49:42.490852063Z]: cni0: port 1(veth32488a86) entered disabled state
-10.5.0.3: kern:    info: [2022-07-28T11:49:42.492470063Z]: device veth32488a86 entered promiscuous mode
-10.5.0.3: kern:    info: [2022-07-28T11:49:42.503105063Z]: IPv6: ADDRCONF(NETDEV_CHANGE): eth0: link becomes ready
-10.5.0.3: kern:    info: [2022-07-28T11:49:42.503944063Z]: IPv6: ADDRCONF(NETDEV_CHANGE): veth32488a86: link becomes ready
-10.5.0.3: kern:    info: [2022-07-28T11:49:42.504764063Z]: cni0: port 1(veth32488a86) entered blocking state
-10.5.0.3: kern:    info: [2022-07-28T11:49:42.505423063Z]: cni0: port 1(veth32488a86) entered forwarding state
-10.5.0.3: kern: warning: [2022-07-28T11:49:44.873616063Z]: kauditd_printk_skb: 14 callbacks suppressed
-10.5.0.3: kern:  notice: [2022-07-28T11:49:44.873619063Z]: audit: type=1326 audit(1659008985.445:25): auid=4294967295 uid=0 gid=0 ses=4294967295 pid=2784 comm="runc:[2:INIT]" exe="/" sig=0 arch=c000003e syscall=3 compat=0 ip=0x55ec0657bd3b code=0x7ffc0000
-10.5.0.3: kern:  notice: [2022-07-28T11:49:44.876609063Z]: audit: type=1326 audit(1659008985.445:26): auid=4294967295 uid=0 gid=0 ses=4294967295 pid=2784 comm="runc:[2:INIT]" exe="/" sig=0 arch=c000003e syscall=3 compat=0 ip=0x55ec0657bd3b code=0x7ffc0000
-10.5.0.3: kern:  notice: [2022-07-28T11:49:44.878789063Z]: audit: type=1326 audit(1659008985.449:27): auid=4294967295 uid=0 gid=0 ses=4294967295 pid=2784 comm="runc:[2:INIT]" exe="/" sig=0 arch=c000003e syscall=257 compat=0 ip=0x55ec0657bdaa code=0x7ffc0000
-10.5.0.3: kern:  notice: [2022-07-28T11:49:44.886693063Z]: audit: type=1326 audit(1659008985.461:28): auid=4294967295 uid=0 gid=0 ses=4294967295 pid=2784 comm="runc:[2:INIT]" exe="/" sig=0 arch=c000003e syscall=202 compat=0 ip=0x55ec06532b43 code=0x7ffc0000
-10.5.0.3: kern:  notice: [2022-07-28T11:49:44.888764063Z]: audit: type=1326 audit(1659008985.461:29): auid=4294967295 uid=0 gid=0 ses=4294967295 pid=2784 comm="runc:[2:INIT]" exe="/" sig=0 arch=c000003e syscall=202 compat=0 ip=0x55ec06532b43 code=0x7ffc0000
-10.5.0.3: kern:  notice: [2022-07-28T11:49:44.891009063Z]: audit: type=1326 audit(1659008985.461:30): auid=4294967295 uid=0 gid=0 ses=4294967295 pid=2784 comm="runc:[2:INIT]" exe="/" sig=0 arch=c000003e syscall=1 compat=0 ip=0x55ec0657bd3b code=0x7ffc0000
-10.5.0.3: kern:  notice: [2022-07-28T11:49:44.893162063Z]: audit: type=1326 audit(1659008985.461:31): auid=4294967295 uid=0 gid=0 ses=4294967295 pid=2784 comm="runc:[2:INIT]" exe="/" sig=0 arch=c000003e syscall=3 compat=0 ip=0x55ec0657bd3b code=0x7ffc0000
-10.5.0.3: kern:  notice: [2022-07-28T11:49:44.895365063Z]: audit: type=1326 audit(1659008985.461:32): auid=4294967295 uid=0 gid=0 ses=4294967295 pid=2784 comm="runc:[2:INIT]" exe="/" sig=0 arch=c000003e syscall=39 compat=0 ip=0x55ec066eb68b code=0x7ffc0000
-10.5.0.3: kern:  notice: [2022-07-28T11:49:44.898306063Z]: audit: type=1326 audit(1659008985.461:33): auid=4294967295 uid=0 gid=0 ses=4294967295 pid=2784 comm="runc:[2:INIT]" exe="/" sig=0 arch=c000003e syscall=59 compat=0 ip=0x55ec0657be16 code=0x7ffc0000
-10.5.0.3: kern:  notice: [2022-07-28T11:49:44.901518063Z]: audit: type=1326 audit(1659008985.473:34): auid=4294967295 uid=0 gid=0 ses=4294967295 pid=2784 comm="http-echo" exe="/http-echo" sig=0 arch=c000003e syscall=158 compat=0 ip=0x455f35 code=0x7ffc0000
+```bash
+talosctl -n <node-ip> logs auditd --follow
 ```
 
-## Cleanup
+The output is similar to the following:
 
-You can clean up the test resources by running the following command:
+```text
+10.5.0.3: type=SECCOMP msg=audit(1794573087.032:91): auid=4294967295 uid=65532 gid=65532 ses=4294967295 subj=system_u:system_r:pod_containerd_t:s0 pid=1998 comm="runc:[2:INIT]" exe="/runc" sig=0 arch=c000003e syscall=3 compat=0 ip=0x7f67995cba6e code=0x7ffc0000
+10.5.0.3: type=SECCOMP msg=audit(1794573087.032:92): auid=4294967295 uid=65532 gid=65532 ses=4294967295 subj=system_u:system_r:pod_containerd_t:s0 pid=1998 comm="runc:[2:INIT]" exe="/runc" sig=0 arch=c000003e syscall=3 compat=0 ip=0x7f67995cba6e code=0x7ffc0000
+10.5.0.3: type=SECCOMP msg=audit(1794573087.044:287): auid=4294967295 uid=65532 gid=65532 ses=4294967295 subj=system_u:system_r:pod_t:s0 pid=1998 comm="http-echo" exe="/http-echo" sig=0 arch=c000003e syscall=158 compat=0 ip=0x468cbf code=0x7ffc0000
+10.5.0.3: type=SECCOMP msg=audit(1794573087.044:288): auid=4294967295 uid=65532 gid=65532 ses=4294967295 subj=system_u:system_r:pod_t:s0 pid=1998 comm="http-echo" exe="/http-echo" sig=0 arch=c000003e syscall=204 compat=0 ip=0x468d16 code=0x7ffc0000
+```
+
+On Talos 1.8 and earlier, which have no `auditd` service, the system calls are in the kernel log instead.
+View them with `talosctl -n <node-ip> dmesg --follow`.
+
+## Clean up
+
+Delete the example pod:
 
 ```bash
 kubectl delete pod audit-pod
